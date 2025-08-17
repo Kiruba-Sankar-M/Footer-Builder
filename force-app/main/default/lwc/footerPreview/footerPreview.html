@@ -1,0 +1,101 @@
+<template>
+    <div class="output-section">
+        <!-- Tabs for Preview, HTML, CSS -->
+        <div class="code-tabs">
+            <button class={previewTabClass} onclick={showPreviewTab}>Preview</button>
+            <button class={htmlTabClass} onclick={showHtmlTab}>HTML</button>
+            <button class={cssTabClass} onclick={showCssTab}>CSS</button>
+        </div>
+
+        <!-- Live Preview Content -->
+        <template if:true={showPreviewContent}>
+            <div class="footer-preview-container">
+                <!-- Header with Download/Copy Buttons -->
+                <div class="preview-header">
+                    <div class="header-left">
+                        <h3 class="preview-title">
+                            <lightning-icon icon-name="utility:preview" size="small"></lightning-icon>
+                            Live Footer Preview
+                        </h3>
+                        <p class="preview-subtitle">Your generated footer will appear here</p>
+                    </div>
+                    <div class="header-right">
+                        <button class="copy-code-btn" onclick={copyFullHtmlFile} title="Copy HTML with embedded CSS">
+                            <lightning-icon icon-name="utility:copy" size="small"></lightning-icon>
+                            <span class="btn-text">Copy File</span>
+                        </button>
+                        <button class="download-code-btn" onclick={downloadFullHtmlFile}
+                            title="Download complete HTML file with embedded CSS">
+                            <lightning-icon icon-name="utility:download" size="small"></lightning-icon>
+                            <span class="btn-text">Download File</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Device Toggle -->
+                <div class="device-toggle-section">
+                    <div class="device-buttons">
+                        <button class={desktopPreviewClass} onclick={showDesktopPreview}>
+                            <lightning-icon icon-name="utility:desktop" size="x-small"></lightning-icon>
+                            Desktop
+                        </button>
+                        <button class={tabletPreviewClass} onclick={showTabletPreview}>
+                            <lightning-icon icon-name="utility:tablet_portrait" size="x-small"></lightning-icon>
+                            Tablet
+                        </button>
+                        <button class={mobilePreviewClass} onclick={showMobilePreview}>
+                            <lightning-icon icon-name="utility:phone_portrait" size="x-small"></lightning-icon>
+                            Mobile
+                        </button>
+                    </div>
+                    <div class="preview-info">
+                        <span class="current-device">Viewing: {currentDeviceLabel}</span>
+                        <span class="device-dimensions">{currentDimensions}</span>
+                    </div>
+                </div>
+
+                <!-- Preview Frame -->
+                <div class="preview-content-wrapper">
+                    <div class="preview-frame" style={devicePreviewStyle}>
+                        <div class="footer-preview-content" data-id="exact-preview">
+                            <!-- The footer HTML is dynamically inserted here -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Footer with Stats -->
+                <div class="preview-footer">
+                    <div class="preview-stats">
+                        <span class="stat-item">
+                            <lightning-icon icon-name="utility:apps" size="xx-small"></lightning-icon>
+                            {totalElements} Elements
+                        </span>
+                        <span class="stat-item">
+                            <lightning-icon icon-name="utility:resource_capacity" size="xx-small"></lightning-icon>
+                            {currentGrid} Grid
+                        </span>
+                    </div>
+                    <div class="last-updated">
+                        Last updated: {lastUpdatedTime}
+                    </div>
+                </div>
+            </div>
+        </template>
+
+        <!-- HTML/CSS Code Content -->
+        <template if:true={showCodeContent}>
+            <div class="code-container">
+                <div class="code-header">
+                    <h3 class="code-title">{activeTab} Code</h3>
+                    <button class="copy-btn" onclick={handleCopyCode}>
+                        <lightning-icon class="copy-icon" icon-name="utility:copy" size="small"></lightning-icon>
+                        Copy Code
+                    </button>
+                </div>
+                <div class="code-content">
+                    <pre><code>{displayedCode}</code></pre>
+                </div>
+            </div>
+        </template>
+    </div>
+</template>

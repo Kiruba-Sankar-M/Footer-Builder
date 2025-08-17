@@ -1,0 +1,420 @@
+<template>
+    <div class="modal-overlay" onclick={handleClose}>
+        <div class="modal-container" onclick={handleModalClick}>
+
+            <!-- Modal Header -->
+            <div class="modal-header">
+                <div class="modal-title">
+                    <lightning-icon icon-name="utility:brush" size="medium" class="title-icon"></lightning-icon>
+                    <div class="title-content">
+                        <h2>Footer Styling</h2>
+                        <p>Customize your footer appearance</p>
+                    </div>
+                </div>
+                <div class="header-controls">
+                    <div class="live-preview-toggle">
+                        <label class="toggle-label">Live Preview</label>
+                        <button class={livePreviewClass} onclick={toggleLivePreview}>
+                            <span class="toggle-slider"></span>
+                        </button>
+                    </div>
+                    <button class="close-btn" onclick={handleClose}>
+                        <lightning-icon icon-name="utility:close" size="small"></lightning-icon>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Section Navigation -->
+            <div class="section-navigation">
+                <button class={spacingTabClass} data-section="spacing" onclick={handleSectionChange}>
+                    <lightning-icon icon-name="utility:expand" size="x-small"></lightning-icon>
+                    Spacing
+                </button>
+                <button class={colorsTabClass} data-section="colors" onclick={handleSectionChange}>
+                    <lightning-icon icon-name="utility:color_swatch" size="x-small"></lightning-icon>
+                    Colors
+                </button>
+                <button class={layoutTabClass} data-section="layout" onclick={handleSectionChange}>
+                    <lightning-icon icon-name="utility:layout" size="x-small"></lightning-icon>
+                    Layout
+                </button>
+                <button class={bordersTabClass} data-section="borders" onclick={handleSectionChange}>
+                    <lightning-icon icon-name="utility:edit" size="x-small"></lightning-icon>
+                    Borders
+                </button>
+                <button class={effectsTabClass} data-section="effects" onclick={handleSectionChange}>
+                    <lightning-icon icon-name="utility:magicwand" size="x-small"></lightning-icon>
+                    Effects
+                </button>
+            </div>
+
+            <!-- Modal Content -->
+            <div class="modal-content">
+
+                <!-- Spacing Section -->
+                <template if:true={isSpacingActive}>
+                    <div class="section-content">
+                        <h3 class="section-title">Spacing Controls</h3>
+
+                        <!-- Unified Controls in One Row -->
+                        <div class="spacing-group">
+                            <h4 class="group-title">Unified Controls</h4>
+                            <div class="unified-controls-row">
+                                <div class="unified-control">
+                                    <label class="control-label">Apply padding to all sides</label>
+                                    <input type="text" class="unified-input" placeholder="e.g., 20, 40"
+                                        oninput={handleUnifiedPaddingChange} />
+                                    <small class="control-hint">Enter a number (px) to apply to all sides</small>
+                                </div>
+
+                                <div class="unified-control">
+                                    <label class="control-label">Apply margin to all sides (supports 'auto')</label>
+                                    <input type="text" class="unified-input" placeholder="e.g., 20, auto, 0"
+                                        oninput={handleUnifiedMarginChange} />
+                                    <small class="control-hint">Enter a number (px) or 'auto' to apply to all sides</small>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Individual Padding Controls -->
+                        <div class="spacing-group">
+                            <h4 class="group-title">Individual Padding</h4>
+                            <div class="spacing-controls">
+                                <div class="spacing-control">
+                                    <label>Top</label>
+                                    <div class="control-pair">
+                                        <input type="range" min="0" max="100" step="0.5" value={paddingTopValue}
+                                            data-direction="top" oninput={handlePaddingSliderChange}
+                                            class="spacing-slider" />
+                                        <input type="text" class="spacing-input" value={paddingTopDisplayValue}
+                                            data-direction="top" oninput={handlePaddingInputChange} placeholder="0" />
+                                    </div>
+                                    <span class="value-display">{paddingTopValue}px</span>
+                                </div>
+
+                                <div class="spacing-control">
+                                    <label>Right</label>
+                                    <div class="control-pair">
+                                        <input type="range" min="0" max="100" step="0.5" value={paddingRightValue}
+                                            data-direction="right" oninput={handlePaddingSliderChange}
+                                            class="spacing-slider" />
+                                        <input type="text" class="spacing-input" value={paddingRightDisplayValue}
+                                            data-direction="right" oninput={handlePaddingInputChange} placeholder="0" />
+                                    </div>
+                                    <span class="value-display">{paddingRightValue}px</span>
+                                </div>
+
+                                <div class="spacing-control">
+                                    <label>Bottom</label>
+                                    <div class="control-pair">
+                                        <input type="range" min="0" max="100" step="0.5" value={paddingBottomValue}
+                                            data-direction="bottom" oninput={handlePaddingSliderChange}
+                                            class="spacing-slider" />
+                                        <input type="text" class="spacing-input" value={paddingBottomDisplayValue}
+                                            data-direction="bottom" oninput={handlePaddingInputChange}
+                                            placeholder="0" />
+                                    </div>
+                                    <span class="value-display">{paddingBottomValue}px</span>
+                                </div>
+
+                                <div class="spacing-control">
+                                    <label>Left</label>
+                                    <div class="control-pair">
+                                        <input type="range" min="0" max="100" step="0.5" value={paddingLeftValue}
+                                            data-direction="left" oninput={handlePaddingSliderChange}
+                                            class="spacing-slider" />
+                                        <input type="text" class="spacing-input" value={paddingLeftDisplayValue}
+                                            data-direction="left" oninput={handlePaddingInputChange} placeholder="0" />
+                                    </div>
+                                    <span class="value-display">{paddingLeftValue}px</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Individual Margin Controls -->
+                        <div class="spacing-group">
+                            <h4 class="group-title">Individual Margin</h4>
+                            <div class="spacing-controls">
+                                <div class="spacing-control">
+                                    <label>Top</label>
+                                    <div class="control-pair">
+                                        <input type="range" min="0" max="100" step="0.5" value={marginTopValue}
+                                            data-direction="top" oninput={handleMarginSliderChange}
+                                            class="spacing-slider" />
+                                        <input type="text" class="spacing-input" value={marginTopDisplayValue}
+                                            data-direction="top" oninput={handleMarginInputChange}
+                                            placeholder="0 or auto" />
+                                    </div>
+                                    <span class="value-display">{marginTopFullDisplay}</span>
+                                </div>
+
+                                <div class="spacing-control">
+                                    <label>Right</label>
+                                    <div class="control-pair">
+                                        <input type="range" min="0" max="100" step="0.5" value={marginRightValue}
+                                            data-direction="right" oninput={handleMarginSliderChange}
+                                            class="spacing-slider" />
+                                        <input type="text" class="spacing-input" value={marginRightDisplayValue}
+                                            data-direction="right" oninput={handleMarginInputChange}
+                                            placeholder="0 or auto" />
+                                    </div>
+                                    <span class="value-display">{marginRightFullDisplay}</span>
+                                </div>
+
+                                <div class="spacing-control">
+                                    <label>Bottom</label>
+                                    <div class="control-pair">
+                                        <input type="range" min="0" max="100" step="0.5" value={marginBottomValue}
+                                            data-direction="bottom" oninput={handleMarginSliderChange}
+                                            class="spacing-slider" />
+                                        <input type="text" class="spacing-input" value={marginBottomDisplayValue}
+                                            data-direction="bottom" oninput={handleMarginInputChange}
+                                            placeholder="0 or auto" />
+                                    </div>
+                                    <span class="value-display">{marginBottomFullDisplay}</span>
+                                </div>
+
+                                <div class="spacing-control">
+                                    <label>Left</label>
+                                    <div class="control-pair">
+                                        <input type="range" min="0" max="100" step="0.5" value={marginLeftValue}
+                                            data-direction="left" oninput={handleMarginSliderChange}
+                                            class="spacing-slider" />
+                                        <input type="text" class="spacing-input" value={marginLeftDisplayValue}
+                                            data-direction="left" oninput={handleMarginInputChange}
+                                            placeholder="0 or auto" />
+                                    </div>
+                                    <span class="value-display">{marginLeftFullDisplay}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </template>
+
+
+                <!-- Colors Section -->
+                <template if:true={isColorsActive}>
+                    <div class="section-content">
+                        <h3 class="section-title">Color Settings</h3>
+
+                        <div class="color-grid">
+                            <div class="color-group">
+                                <label class="color-label">Background Color</label>
+                                <div class="color-input-wrapper">
+                                    <input type="color" class="color-picker" value={backgroundColorValue}
+                                        data-property="backgroundColor" oninput={handleColorChange} />
+                                    <input type="text" class="color-text" value={backgroundColorValue}
+                                        data-property="backgroundColor" oninput={handleStyleChange}
+                                        placeholder="#2c3e50" />
+                                </div>
+                            </div>
+
+                            <div class="color-group">
+                                <label class="color-label">Text Color</label>
+                                <div class="color-input-wrapper">
+                                    <input type="color" class="color-picker" value={textColorValue}
+                                        data-property="color" oninput={handleColorChange} />
+                                    <input type="text" class="color-text" value={textColorValue} data-property="color"
+                                        oninput={handleStyleChange} placeholder="#ffffff" />
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Color Presets -->
+                        <div class="preset-section">
+                            <h4 class="preset-title">Quick Presets</h4>
+                            <div class="preset-grid">
+                                <button class="preset-btn modern" data-preset="modern" onclick={applyPreset}>
+                                    <span class="preset-name" style="pointer-events: none;">Modern Dark</span>
+                                </button>
+                                <button class="preset-btn minimal" data-preset="minimal" onclick={applyPreset}>
+                                    <span class="preset-name" style="pointer-events: none;">Clean Light</span>
+                                </button>
+                                <button class="preset-btn corporate" data-preset="corporate" onclick={applyPreset}>
+                                    <span class="preset-name" style="pointer-events: none;">Corporate Blue</span>
+                                </button>
+                                <button class="preset-btn elegant" data-preset="elegant" onclick={applyPreset}>
+                                    <span class="preset-name" style="pointer-events: none;">Elegant Gray</span>
+                                </button>
+                            </div>
+                        </div>
+
+                    </div>
+                </template>
+
+                <!-- Layout Section -->
+                <template if:true={isLayoutActive}>
+                    <div class="section-content">
+                        <h3 class="section-title">Layout Settings</h3>
+
+                        <div class="layout-grid">
+                            <div class="form-group">
+                                <label class="form-label">Text Alignment</label>
+                                <select class="select-input" data-property="textAlign" oninput={handleStyleChange}>
+                                    <option value="left">Left</option>
+                                    <option value="center">Center</option>
+                                    <option value="right">Right</option>
+                                    <option value="justify">Justify</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label">Width</label>
+                                <select class="select-input" data-property="width" oninput={handleStyleChange}>
+                                    <option value="100%">Full Width (100%)</option>
+                                    <option value="90%">90%</option>
+                                    <option value="80%">80%</option>
+                                    <option value="1200px">Fixed (1200px)</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label">Min Height</label>
+                                <div class="input-with-unit">
+                                    <input type="number" class="number-input" min="100" max="800" value={minHeightValue}
+                                        data-property="minHeight" oninput={handleStyleChange} />
+                                    <span class="unit-label">px</span>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label">Font Size</label>
+                                <div class="input-with-unit">
+                                    <input type="number" class="number-input" min="10" max="32" value={fontSizeValue}
+                                        data-property="fontSize" oninput={handleStyleChange} />
+                                    <span class="unit-label">px</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </template>
+
+                <!-- Borders Section -->
+                <template if:true={isBordersActive}>
+                    <div class="section-content">
+                        <h3 class="section-title">Border Settings</h3>
+
+                        <div class="border-grid">
+                            <div class="form-group">
+                                <label class="form-label">Border Style</label>
+                                <select class="select-input" data-property="borderStyle" oninput={handleStyleChange}>
+                                    <option value="solid">Solid</option>
+                                    <option value="dashed">Dashed</option>
+                                    <option value="dotted">Dotted</option>
+                                    <option value="none">None</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label">Border Color</label>
+                                <div class="color-input-wrapper">
+                                    <input type="color" class="color-picker" value={borderColorValue}
+                                        data-property="borderColor" oninput={handleColorChange} />
+                                    <input type="text" class="color-text" value={borderColorValue}
+                                        data-property="borderColor" oninput={handleStyleChange} placeholder="#ffffff" />
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label">Border Radius</label>
+                                <div class="input-with-unit">
+                                    <input type="number" class="number-input" min="0" max="50" value={borderRadiusValue}
+                                        data-property="borderRadius" oninput={handleStyleChange} />
+                                    <span class="unit-label">px</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Border Width Controls -->
+                        <div class="border-width-group">
+                            <h4 class="group-title">Border Width</h4>
+                            <div class="border-controls">
+                                <div class="border-control">
+                                    <label>Top</label>
+                                    <input type="range" min="0" max="10" step="0.5" value={borderTopWidthValue}
+                                        data-direction="top" oninput={handleBorderWidthChange} />
+                                    <span>{borderTopWidthValue}px</span>
+                                </div>
+                                <div class="border-control">
+                                    <label>Right</label>
+                                    <input type="range" min="0" max="10" step="0.5" value={borderRightWidthValue}
+                                        data-direction="right" oninput={handleBorderWidthChange} />
+                                    <span>{borderRightWidthValue}px</span>
+                                </div>
+                                <div class="border-control">
+                                    <label>Bottom</label>
+                                    <input type="range" min="0" max="10" step="0.5" value={borderBottomWidthValue}
+                                        data-direction="bottom" oninput={handleBorderWidthChange} />
+                                    <span>{borderBottomWidthValue}px</span>
+                                </div>
+                                <div class="border-control">
+                                    <label>Left</label>
+                                    <input type="range" min="0" max="10" step="0.5" value={borderLeftWidthValue}
+                                        data-direction="left" oninput={handleBorderWidthChange} />
+                                    <span>{borderLeftWidthValue}px</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </template>
+
+                <!-- Effects Section -->
+                <template if:true={isEffectsActive}>
+                    <div class="section-content">
+                        <h3 class="section-title">Visual Effects</h3>
+
+                        <div class="effects-grid">
+                            <div class="form-group">
+                                <label class="form-label">Box Shadow</label>
+                                <select class="select-input" data-property="boxShadow" oninput={handleStyleChange}>
+                                    <option value="none">None</option>
+                                    <option value="0 2px 4px rgba(0,0,0,0.1)">Subtle</option>
+                                    <option value="0 4px 12px rgba(0,0,0,0.15)">Medium</option>
+                                    <option value="0 8px 25px rgba(0,0,0,0.25)">Strong</option>
+                                    <option value="0 15px 35px rgba(0,0,0,0.3)">Dramatic</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label">Font Weight</label>
+                                <select class="select-input" data-property="fontWeight" oninput={handleStyleChange}>
+                                    <option value="300">Light (300)</option>
+                                    <option value="400">Normal (400)</option>
+                                    <option value="500">Medium (500)</option>
+                                    <option value="600">Semi Bold (600)</option>
+                                    <option value="700">Bold (700)</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </template>
+
+                <!-- Live Preview Section -->
+                <div class="preview-section">
+                    <h3 class="section-title">Live Preview</h3>
+                    <div class="preview-box" style={previewStyle}>
+                        <div class="preview-content">
+                            <h4>Footer Preview</h4>
+                            <p>This is how your footer will look</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Modal Footer -->
+            <div class="modal-footer">
+                <button class="btn secondary" onclick={handleReset}>
+                    <lightning-icon icon-name="utility:refresh" size="x-small"></lightning-icon>
+                    Reset to Defaults
+                </button>
+                <button class="btn secondary" onclick={handleClose}>
+                    Cancel
+                </button>
+                <button class="btn primary" onclick={handleSave}>
+                    <lightning-icon icon-name="utility:save" size="x-small"></lightning-icon>
+                    Apply Changes
+                </button>
+            </div>
+        </div>
+    </div>
+</template>

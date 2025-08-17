@@ -1,0 +1,324 @@
+<template>
+    <template if:true={isLoading}>
+        <div class="slds-is-relative">
+            <section class="slds-modal slds-fade-in-open">
+                <lightning-spinner alternative-text="loading..." variant="brand"></lightning-spinner>
+            </section>
+            <div class="slds-backdrop slds-backdrop_open" style="width: 60%; height:50%; margin:auto"></div>
+        </div>
+    </template>
+
+    <div class="grid-generator-container">
+        <!-- Header -->
+        <div class="header">
+            <h1 class="title">Declarative Footer Builder</h1>
+            <p class="subtitle">Create stunning footers without code</p>
+        </div>
+
+        <!-- Enhanced Device Preview Controls -->
+        <div class="device-controls">
+            <div class="device-buttons">
+                <button class={desktopButtonClass} onclick={switchToDesktop}>
+                    <lightning-icon icon-name="utility:desktop" size="small"></lightning-icon>
+                    <div class="device-info">
+                        <span class="device-name">Desktop</span>
+                        <template if:true={isDesktopActive}>
+                            <small class="device-details">{deviceInfoText}</small>
+                        </template>
+                    </div>
+                </button>
+                <button class={tabletButtonClass} onclick={switchToTablet}>
+                    <lightning-icon icon-name="utility:tablet_portrait" size="small"></lightning-icon>
+                    <div class="device-info">
+                        <span class="device-name">Tablet</span>
+                        <template if:true={isTabletActive}>
+                            <small class="device-details">{deviceInfoText}</small>
+                        </template>
+                    </div>
+                </button>
+                <button class={mobileButtonClass} onclick={switchToMobile}>
+                    <lightning-icon icon-name="utility:phone_portrait" size="small"></lightning-icon>
+                    <div class="device-info">
+                        <span class="device-name">Mobile</span>
+                        <template if:true={isMobileActive}>
+                            <small class="device-details">{deviceInfoText}</small>
+                        </template>
+                    </div>
+                </button>
+            </div>
+            <div class="sync-controls">
+                <template if:false={isDesktopActive}>
+                    <button class="sync-btn" onclick={syncFromDesktop} title="Copy divs and styles from desktop">
+                        <lightning-icon icon-name="utility:sync" size="x-small"></lightning-icon>
+                        Sync From Desktop
+                    </button>
+                </template>
+            </div>
+            <div class="documentation-control">
+                <button class="documentation-btn" onclick={openDocumentation}>
+                    <lightning-icon icon-name="utility:open_folder" size="x-small"></lightning-icon>
+                    Documentation
+                </button>
+            </div>
+        </div>
+
+        <!-- Enhanced Controls Section -->
+        <div class="controls-section">
+            <div class="device-context">
+                <h3 class="context-title">
+                    <lightning-icon icon-name="utility:settings" size="small"></lightning-icon>
+                    {previewMode} Settings
+                </h3>
+                <p class="context-description">Configure grid layout for {previewMode} devices independently</p>
+            </div>
+
+            <div class="controls-grid">
+                <div class="control-group">
+                    <label class="control-label">Columns</label>
+                    <input type="number" class="control-input" min="1" max="12" value={columns}
+                        onchange={handleColumnsChange} />
+                    <small class="control-hint">Max columns for {previewMode}</small>
+                </div>
+
+                <div class="control-group">
+                    <label class="control-label">Rows</label>
+                    <input type="number" class="control-input" min="1" value={rows} onchange={handleRowsChange} />
+                    <small class="control-hint">Max rows for {previewMode}</small>
+                </div>
+
+                <div class="control-group">
+                    <label class="control-label">Gap (px)</label>
+                    <input type="number" class="control-input" min="0" max="50" value={gap}
+                        onchange={handleGapChange} />
+                    <small class="control-hint">Spacing between divs</small>
+                </div>
+
+                <!-- Enhanced Cell Width Control -->
+                <div class="control-group">
+                    <label class="control-label">Cell Width</label>
+                    <lightning-combobox name="cellWidthType" variant="label-hidden" value={currentCellWidthType}
+                        options={cellWidthOptions} onchange={handleCellWidthTypeChange} placeholder="Select width type">
+                    </lightning-combobox>
+
+                    <!-- Conditional Custom Input for Width -->
+                    <template if:true={showCustomWidthInput}>
+                        <div class="custom-input-wrapper">
+                            <input type="number" class="custom-dimension-input" placeholder="Enter width in px"
+                                value={customWidthValue} min="1" oninput={handleCustomWidthChange} />
+                            <span class="unit-label">px</span>
+                        </div>
+                    </template>
+
+                    <small class="control-hint">Width of each cell</small>
+                </div>
+
+                <!-- Enhanced Cell Height Control -->
+                <div class="control-group">
+                    <label class="control-label">Cell Height</label>
+                    <lightning-combobox name="cellHeightType" variant="label-hidden" value={currentCellHeightType}
+                        options={cellHeightOptions} onchange={handleCellHeightTypeChange}
+                        placeholder="Select height type">
+                    </lightning-combobox>
+
+                    <!-- Conditional Custom Input for Height -->
+                    <template if:true={showCustomHeightInput}>
+                        <div class="custom-input-wrapper">
+                            <input type="number" class="custom-dimension-input" placeholder="Enter height in px"
+                                value={customHeightValue} min="1" oninput={handleCustomHeightChange} />
+                            <span class="unit-label">px</span>
+                        </div>
+                    </template>
+
+                    <small class="control-hint">Height of each cell</small>
+                </div>
+
+                <div class="control-group">
+                    <label class="control-label">Status</label>
+                    <div class="status-display">
+                        <span class="status-text">{currentDeviceInfo.divs} divs</span>
+                        <small class="status-detail">{statusDetailText}</small>
+                    </div>
+                </div>
+            </div>
+
+            <div class="action-buttons">
+                <button class="reset-btn" onclick={resetGrid}>
+                    <lightning-icon icon-name="utility:refresh" size="small"></lightning-icon>
+                    Reset {previewMode}
+                </button>
+
+                <button class="undo-btn" onclick={handleUndo} disabled={isUndoDisabled}>
+                    <lightning-icon icon-name="utility:undo" size="small"></lightning-icon>
+                    Undo
+                </button>
+                <button class="redo-btn" onclick={handleRedo} disabled={isRedoDisabled}>
+                    <lightning-icon icon-name="utility:redo" size="small"></lightning-icon>
+                    Redo
+                </button>
+
+
+                <button class="style-btn primary" onclick={openFooterStyleModal}>
+                    <lightning-icon icon-name="utility:brush" size="small"></lightning-icon>
+                    Style Footer
+                </button>
+
+                <template if:true={hasSelectedDivs}>
+                    <button class="style-btn bulk" onclick={openMultiDivStyleModal}>
+                        <lightning-icon icon-name="utility:multi_select_checkbox" size="small"></lightning-icon>
+                        Style Selected Divs ({selectedDivCount})
+                    </button>
+                </template>
+
+                <template if:true={hasSelectedDivs}>
+                    <button class="clear-btn" onclick={clearSelection}>
+                        <lightning-icon icon-name="utility:clear" size="small"></lightning-icon>
+                        Clear Selection
+                    </button>
+                </template>
+
+                <button class="config-btn" onclick={openConfigModal}>
+                    <lightning-icon icon-name="utility:save" size="small"></lightning-icon>
+                    Save/Load
+                </button>
+            </div>
+        </div>
+
+        <!-- Grid Preview -->
+        <div class="preview-section">
+            <h2 class="section-title">
+                <lightning-icon icon-name="utility:preview" size="small"></lightning-icon>
+                {previewSectionTitle}
+            </h2>
+            <div class="selection-hint">
+                <small>💡 Click empty cells to add divs • Ctrl+Click to select multiple divs • Shift+Click for range
+                    selection</small>
+            </div>
+            <div class="grid-wrapper">
+                <div class="grid-container" style={gridContainerStyle}>
+                    <!-- Enhanced grid cell template -->
+                    <!-- Filled Cell Template with Resize Handles -->
+                    <template for:each={processedGridItems} for:item="item">
+                        <div key={item.id} class={item.className} style={item.style} data-id={item.id}
+                            draggable={item.draggable} ondragstart={handleDragStart} ondragend={handleDragEnd}
+                            ondragover={handleDragOver} ondragleave={handleDragLeave} ondrop={handleDrop}
+                            onclick={handleCellClick}>
+
+                            <!-- Cell Content Display -->
+                            <template if:false={item.isEmpty}>
+                                <div class="cell-content">
+                                    <!-- Text Content -->
+                                    <template if:true={item.isTextContent}>
+                                        <span class="cell-text">{item.content}</span>
+                                    </template>
+
+                                    <!-- Image Content -->
+                                    <template if:true={item.isImageContent}>
+                                        <img style="max-width: 130px; max-height:130px;" src={item.imageUrl}
+                                            alt={item.content} class="cell-image" />
+                                    </template>
+
+                                    <!-- Social Icons Content -->
+                                    <template if:true={item.isSocialIconsContent}>
+                                        <div class="social-icons-grid-preview" style={item.socialPreviewStyle}>
+                                            <template if:true={item.hasSocialIcons}>
+                                                <template for:each={item.socialIconsPreview} for:item="icon">
+                                                    <img key={icon.id} src={icon.iconUrl} alt={icon.platform}
+                                                        class="social-icon-grid" style={item.iconPreviewStyle} />
+                                                </template>
+                                            </template>
+                                            <template if:false={item.hasSocialIcons}>
+                                                <div class="social-placeholder">
+                                                    <lightning-icon icon-name="utility:socialshare"
+                                                        size="small"></lightning-icon>
+                                                </div>
+                                            </template>
+                                        </div>
+                                    </template>
+                                </div>
+
+                                <!-- Action Buttons -->
+                                <div class="cell-actions">
+                                    <div class="action-button-wrapper">
+                                        <button class="action-btn copy-button" data-id={item.id} onclick={handleCopyDiv}
+                                            title="Copy Div">
+                                            <lightning-icon icon-name="utility:copy" alternative-text="Copy"
+                                                size="xx-small"></lightning-icon>
+                                        </button>
+                                        <template if:true={showCopiedTooltip}>
+                                            <span class="copied-tooltip">{copiedTooltipText}</span>
+                                        </template>
+                                    </div>
+                                    <button class="action-btn" data-id={item.id} onclick={openDivStyleModal}
+                                        title="Style this div">
+                                        <lightning-icon icon-name="utility:color_swatch"
+                                            size="xx-small"></lightning-icon>
+                                    </button>
+                                    <button class="delete-btn" data-id={item.id} onclick={handleDeleteCell}
+                                        title="Delete this div">×</button>
+                                </div>
+
+                                <!-- MISSING: Resize Handles (ADD THESE) -->
+                                <template if:true={item.draggable}>
+                                    <div class="resize-handle resize-right" data-id={item.id} data-direction="right"
+                                        onmouseup={handleMouseUp} onmousemove={handleMouseMove}
+                                        onmousedown={handleResizeStart}></div>
+                                    <div class="resize-handle resize-bottom" data-id={item.id} data-direction="bottom"
+                                        onmouseup={handleMouseUp} onmousemove={handleMouseMove}
+                                        onmousedown={handleResizeStart}></div>
+                                    <div class="resize-handle resize-corner" data-id={item.id} data-direction="corner"
+                                        onmouseup={handleMouseUp} onmousemove={handleMouseMove}
+                                        onmousedown={handleResizeStart}></div>
+                                </template>
+                            </template>
+
+                            <!-- Empty Cell -->
+                            <template if:true={item.isEmpty}>
+                                <template if:true={isCopyModeActive}>
+                                    <lightning-icon icon-name="utility:paste" size="x-small"></lightning-icon>
+                                    <span style="margin-left:0.5rem;">Paste Here</span>
+                                </template>
+                                <template if:false={isCopyModeActive}>
+                                    <lightning-icon icon-name="utility:add" size="x-small"></lightning-icon>
+                                    <span style="margin-left:0.5rem;color:black">Add Content</span>
+                                </template>
+                            </template>
+                        </div>
+                    </template>
+
+                </div>
+            </div>
+        </div>
+
+        <!-- Refactored Output Section -->
+        <template if:false={isDivStyleModalOpen}>
+            <c-footer-preview instance-id="main-app">
+            </c-footer-preview>
+        </template>
+
+        <!-- Modals -->
+        <template if:true={showFooterStyleModal}>
+            <c-footer-style-modal styles={footerStyles} onclose={closeFooterStyleModal}
+                onstyleupdate={handleFooterStyleUpdate}>
+            </c-footer-style-modal>
+        </template>
+
+        <template if:true={showDivStyleModal}>
+            <c-div-style-modal current-div-id={currentDivId} selected-div-ids={selectedDivIds}
+                current-device={previewMode} onclose={closeDivStyleModal}>
+            </c-div-style-modal>
+        </template>
+
+
+        <template if:true={showConfigModal}>
+            <c-footer-config-manager configurations={configurations} onclose={handleCloseConfigModal}
+                onconfigupdate={handleConfigUpdate}>
+            </c-footer-config-manager>
+        </template>
+
+        <div class="built-by-section">
+            <p>Built By: Kiruba Sankar M</p>
+            <a href="https://kiruba-sankar-dev-ed.develop.my.site.com/portfolio/s/" target="_blank"
+                class="portfolio-link">View Portfolio</a>
+        </div>
+    </div>
+</template>

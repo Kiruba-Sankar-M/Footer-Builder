@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Declarative Footer Builder - User Manual</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            background-color: #f9f9f9;
+        }
+        h1, h2, h3 {
+            color: #065f46;
+            border-bottom: 2px solid #d1fae5;
+            padding-bottom: 10px;
+            margin-top: 30px;
+        }
+        h1 {
+            text-align: center;
+            font-size: 2.5em;
+            border-bottom: 3px solid #10b981;
+        }
+        p {
+            margin-bottom: 15px;
+        }
+        code {
+            background-color: #eef;
+            padding: 2px 5px;
+            border-radius: 4px;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .section {
+            margin-top: 40px;
+        }
+        .step {
+            margin-bottom: 20px;
+            padding-left: 20px;
+            position: relative;
+        }
+        .step::before {
+            content: '✔';
+            position: absolute;
+            left: 0;
+            color: #10b981;
+            font-weight: bold;
+        }
+        .highlight {
+            background-color: #f0fdf4;
+            border: 1px solid #bbf7d0;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+        .highlight strong {
+            color: #065f46;
+        }
+        ul {
+            list-style-type: disc;
+            padding-left: 40px;
+        }
+        li {
+            margin-bottom: 10px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Welcome to the Declarative Footer Builder!</h1>
+    <p>This guide will walk you through everything you need to know to create beautiful, responsive footers for your websites without writing a single line of code. Let's get started!</p>
+
+    <div class="section">
+        <h2>Getting Started: The Main Screen</h2>
+        <p>When you open the builder, you'll see a few key areas:</p>
+        <ul>
+            <li><strong>The Main Canvas:</strong> This is the large grid area where you'll build your footer. It's like your digital playground!</li>
+            <li><strong>Device Controls:</strong> At the top, you'll find buttons for <strong>Desktop</strong>, <strong>Tablet</strong>, and <strong>Mobile</strong>. This lets you see and design how your footer looks on different screen sizes.</li>
+            <li><strong>Settings & Actions:</strong> Below the device controls, you'll find inputs to change the grid layout (rows, columns) and buttons for styling, saving, and loading your work.</li>
+        </ul>
+    </div>
+
+    <div class="section">
+        <h2>1. Building Your Footer Layout</h2>
+        <p>First, let's set up the basic structure of your footer.</p>
+        
+        <h3>Switching Between Devices</h3>
+        <div class="step">Click the <strong>Desktop</strong>, <strong>Tablet</strong>, or <strong>Mobile</strong> buttons to switch your view. Each device has its own independent layout, allowing you to create the perfect experience for every user.</div>
+        
+        <h3>Adjusting Rows, Columns, and Gaps</h3>
+        <div class="step">Use the input fields labeled <strong>Columns</strong>, <strong>Rows</strong>, and <strong>Gap</strong> to control the grid. For example, a "4x2" grid with an "8px" gap is a great starting point for a desktop footer.</div>
+        
+        <div class="highlight">
+            <strong>Pro Tip:</strong> Start by designing your <strong>Desktop</strong> view first. Then, switch to Tablet and Mobile and click the <strong>Sync From Desktop</strong> button to copy your work over. This saves a lot of time!
+        </div>
+    </div>
+
+    <div class="section">
+        <h2>2. Adding and Arranging Content</h2>
+        <p>Once your grid is ready, it's time to fill it with content.</p>
+
+        <h3>Adding a Content Box</h3>
+        <div class="step">Simply click on any empty, gray-dashed cell in the grid. A new content box (a "div") will appear, ready for you to customize.</div>
+
+        <h3>Drag and Drop</h3>
+        <div class="step">To move a content box, just click, hold, and drag it to another empty cell. It's that easy!</div>
+
+        <h3>Resizing a Box</h3>
+        <div class="step">Hover over a content box. You'll see small blue handles on the right, bottom, and corner. Click and drag these handles to make the box span multiple columns or rows.</div>
+    </div>
+
+    <div class="section">
+        <h2>3. Styling Your Content</h2>
+        <p>This is where you bring your footer to life! You can style the entire footer background or individual content boxes.</p>
+
+        <h3>Styling the Whole Footer</h3>
+        <div class="step">Click the <strong>Style Footer</strong> button. A modal will appear where you can change the background color, padding, and other overall styles for the entire footer area.</div>
+
+        <h3>Styling a Single Content Box</h3>
+        <div class="step">Hover over any content box and click the <strong>paintbrush icon</strong>. This opens the powerful Style Editor.</div>
+        
+        <h3>Inside the Style Editor</h3>
+        <p>The Style Editor has several tabs:</p>
+        <ul>
+            <li><strong>Content:</strong> Choose what kind of content to add.
+                <ul>
+                    <li><strong>Text:</strong> Write any text you want. You can also make it a clickable link.</li>
+                    <li><strong>Image:</strong> Add an image by pasting a URL or choosing from sample logos. You can also make the image a link.</li>
+                    <li><strong>Social Icons:</strong> Add a group of social media icons, complete with links.</li>
+                </ul>
+            </li>
+            <li><strong>Text Styling:</strong> Change font size, weight, color, and alignment.</li>
+            <li><strong>Image Styling:</strong> Control how your image fits within its box (e.g., cover, contain), its size, and more.</li>
+            <li><strong>Spacing:</strong> Adjust the padding (space inside the box) and margin (space outside the box).</li>
+            <li><strong>Effects:</strong> Add borders, shadows, and rounded corners.</li>
+        </ul>
+
+        <h3>Styling Multiple Boxes at Once (Multi-Select)</h3>
+        <div class="step">Hold down the <strong>Ctrl</strong> key (or <strong>Cmd</strong> on Mac) and click on all the boxes you want to style together.</div>
+        <div class="step">Once selected, click the new <strong>Style Selected Divs</strong> button that appears. Any style you apply will affect all the selected boxes!</div>
+        <div class="step">To select a range of boxes quickly, click the first box, then hold <strong>Shift</strong> and click the last box.</div>
+    </div>
+
+    <div class="section">
+        <h2>4. Advanced Editing Features</h2>
+        <p>The builder includes powerful features to make your workflow fast and efficient.</p>
+
+        <h3>Undo and Redo</h3>
+        <div class="step">Made a mistake? No problem! Use the <strong>Undo</strong> and <strong>Redo</strong> buttons to step backward or forward through your changes.</div>
+
+        <h3>Copy and Paste</h3>
+        <div class="step">Hover over a box and click the <strong>copy icon</strong>. All empty cells will turn gray, indicating they are ready for pasting.</div>
+        <div class="step">Click on any gray empty cell to paste a perfect copy of your content and styles. The pasted box will have "-copy" added to its name and content to keep things unique.</div>
+    </div>
+
+    <div class="section">
+        <h2>5. Saving, Loading, and Downloading</h2>
+        <p>Save your hard work and get the final code for your website.</p>
+
+        <h3>Saving and Loading Your Work</h3>
+        <div class="step">Click the <strong>Save/Load</strong> button to open the Configuration Manager.</div>
+        <ul>
+            <li><strong>Save:</strong> Give your design a name and save it to your browser's local storage or download it as a JSON file to your computer.</li>
+            <li><strong>Load:</strong> Load a previously saved design from your browser or upload a JSON file from your computer.</li>
+            <li><strong>Presets:</strong> You can also load one of the pre-built sample footers to get a head start!</li>
+        </ul>
+
+        <h3>Previewing and Downloading Your Final Footer</h3>
+        <div class="step">The <strong>Live Footer Preview</strong> section at the bottom of the page shows you exactly what your footer will look like.</div>
+        <div class="step">Use the <strong>Desktop, Tablet, and Mobile</strong> toggle buttons within the preview to check its responsiveness.</div>
+        <div class="step">When you're happy with your design, click the <strong>Download File</strong> button. This will give you a single, ready-to-use HTML file with all the necessary HTML and CSS code embedded. You can use this file directly in your web project!</div>
+    </div>
+
+    <div class="section">
+        <h2>Technical Documentation</h2>
+        <p>This section provides a technical overview of the Lightning Web Components (LWCs) used in the Footer Builder.</p>
+
+        <h3>Component: <code>divStyleModal</code></h3>
+        <p><strong>Purpose:</strong> A modal for styling individual divs within the footer grid.</p>
+        <p><strong>Attributes:</strong></p>
+        <ul>
+            <li><code>currentDivId</code>: The ID of the div currently being styled.</li>
+            <li><code>selectedDivIds</code>: An array of IDs of the divs selected for bulk styling.</li>
+            <li><code>currentDevice</code>: The current device view (e.g., 'desktop', 'tablet', 'mobile').</li>
+        </ul>
+        <p><strong>Methods:</strong></p>
+        <ul>
+            <li><code>connectedCallback()</code>: Initializes the component by fetching the styles of the current div.</li>
+            <li><code>handleClose()</code>: Closes the modal.</li>
+            <li><code>handleSave()</code>: Saves the changes and closes the modal.</li>
+            <li><code>handleStyleChange()</code>: Handles changes to the style inputs.</li>
+            <li><code>handleColorChange()</code>: Handles changes to the color inputs.</li>
+            <li><code>handleSectionChange()</code>: Handles switching between sections of the modal.</li>
+        </ul>
+        <p><strong>Events:</strong></p>
+        <ul>
+            <li><code>close</code>: Fired when the modal is closed.</li>
+        </ul>
+
+        <h3>Component: <code>footerConfigManager</code></h3>
+        <p><strong>Purpose:</strong> A modal for saving, loading, and managing footer configurations.</p>
+        <p><strong>Attributes:</strong></p>
+        <ul>
+            <li><code>configurations</code>: An object containing the footer configurations for all devices.</li>
+        </ul>
+        <p><strong>Methods:</strong></p>
+        <ul>
+            <li><code>handleCloseConfigModal()</code>: Closes the modal.</li>
+            <li><code>handleConfigUpdate()</code>: Updates the footer configurations.</li>
+            <li><code>handleSave()</code>: Saves the current configuration to a file.</li>
+            <li><code>handleLoad()</code>: Loads a configuration from a file.</li>
+        </ul>
+        <p><strong>Events:</strong></p>
+        <ul>
+            <li><code>close</code>: Fired when the modal is closed.</li>
+            <li><code>configupdate</code>: Fired when the configurations are updated.</li>
+        </ul>
+
+        <h3>Component: <code>footerGeneratorParent</code></h3>
+        <p><strong>Purpose:</strong> The main component for the footer builder, containing the grid, controls, and modals.</p>
+        <p><strong>Attributes:</strong></p>
+        <ul>
+            <li><code>columns</code>: The number of columns in the grid.</li>
+            <li><code>rows</code>: The number of rows in the grid.</li>
+            <li><code>gap</code>: The gap between grid cells.</li>
+            <li><code>gridItems</code>: An array of objects representing the cells in the grid.</li>
+            <li><code>previewMode</code>: The current device view.</li>
+        </ul>
+        <p><strong>Methods:</strong></p>
+        <ul>
+            <li><code>connectedCallback()</code>: Initializes the component.</li>
+            <li><code>switchDevice()</code>: Switches the device view.</li>
+            <li><code>handleColumnsChange()</code>: Handles changes to the number of columns.</li>
+            <li><code>handleRowsChange()</code>: Handles changes to the number of rows.</li>
+            <li><code>handleGapChange()</code>: Handles changes to the gap.</li>
+            <li><code>handleCellClick()</code>: Handles clicks on grid cells.</li>
+            <li><code>handleDeleteCell()</code>: Deletes a div from a cell.</li>
+            <li><code>openDivStyleModal()</code>: Opens the <code>divStyleModal</code>.</li>
+            <li><code>openFooterStyleModal()</code>: Opens the <code>footerStyleModal</code>.</li>
+            <li><code>openConfigModal()</code>: Opens the <code>footerConfigManager</code>.</li>
+            <li><code>syncFromDesktop()</code>: Syncs the content and dimensions from the desktop view.</li>
+        </ul>
+
+        <h3>Component: <code>footerPreview</code></h3>
+        <p><strong>Purpose:</strong> Displays a live preview of the footer.</p>
+        <p><strong>Attributes:</strong></p>
+        <ul>
+            <li><code>configurations</code>: The footer configurations.</li>
+            <li><code>currentDevice</code>: The current device view.</li>
+        </ul>
+        <p><strong>Methods:</strong></p>
+        <ul>
+            <li><code>refreshPreview()</code>: Refreshes the preview.</li>
+            <li><code>generateCss()</code>: Generates the CSS for the footer.</li>
+            <li><code>downloadFile()</code>: Downloads the footer as an HTML file.</li>
+        </ul>
+
+        <h3>Component: <code>footerState</code></h3>
+        <p><strong>Purpose:</strong> A service component for managing the state of the footer builder.</p>
+        <p><strong>Methods:</strong></p>
+        <ul>
+            <li><code>setConfigurations()</code>: Sets the footer configurations.</li>
+            <li><code>getConfigurations()</code>: Gets the footer configurations.</li>
+            <li><code>updateGridItem()</code>: Updates a grid item.</li>
+            <li><code>moveGridItem()</code>: Moves a grid item.</li>
+            <li><code>updateFooterStyles()</code>: Updates the footer styles.</li>
+            <li><code>setFormFactor()</code>: Sets the form factor.</li>
+            <li><code>getFormFactor()</code>: Gets the form factor.</li>
+            <li><code>subscribe()</code>: Subscribes to state changes.</li>
+            <li><code>unsubscribe()</code>: Unsubscribes from state changes.</li>
+        </ul>
+
+        <h3>Component: <code>footerStyleModal</code></h3>
+        <p><strong>Purpose:</strong> A modal for styling the overall footer.</p>
+        <p><strong>Attributes:</strong></p>
+        <ul>
+            <li><code>styles</code>: The current footer styles.</li>
+        </ul>
+        <p><strong>Methods:</strong></p>
+        <ul>
+            <li><code>handleClose()</code>: Closes the modal.</li>
+            <li><code>handleSave()</code>: Saves the changes and closes the modal.</li>
+            <li><code>handleStyleChange()</code>: Handles changes to the style inputs.</li>
+            <li><code>handleColorChange()</code>: Handles changes to the color inputs.</li>
+        </ul>
+        <p><strong>Events:</strong></p>
+        <ul>
+            <li><code>close</code>: Fired when the modal is closed.</li>
+            <li><code>styleupdate</code>: Fired when the styles are updated.</li>
+        </ul>
+    </div>
+
+    <div class="highlight">
+        <strong>And that's it!</strong> You now have all the knowledge to build professional, responsive footers with ease. Happy building!
+    </div>
+
+</body>
+</html>

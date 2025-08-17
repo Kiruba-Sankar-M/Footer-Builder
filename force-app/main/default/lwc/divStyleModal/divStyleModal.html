@@ -1,0 +1,1092 @@
+<template>
+    <div class="modal-overlay" onclick={handleClose}>
+        <div class="modal-container" onclick={handleModalClick}>
+
+            <!-- Modal Header -->
+            <div class="modal-header">
+                <div class="modal-title">
+                    <lightning-icon icon-name="utility:color_swatch" size="medium" class="title-icon"></lightning-icon>
+                    <div class="title-content">
+                        <h2>{modalTitle}</h2>
+                        <p>{modalSubtitle}</p>
+                    </div>
+                </div>
+                <div class="header-controls">
+                    <div class="live-preview-toggle">
+                        <label class="toggle-label">Live Preview</label>
+                        <button class={livePreviewClass} onclick={toggleLivePreview}>
+                            <span class="toggle-slider"></span>
+                        </button>
+                    </div>
+                    <button class="close-btn" onclick={handleClose}>
+                        <lightning-icon icon-name="utility:close" size="small"></lightning-icon>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Section Navigation -->
+
+
+            <!-- Modal Content -->
+            <div class="modal-content">
+                <div class="styling-container">
+                    <div class="section-navigation">
+                        <template if:true={showContentTab}>
+                            <button class={contentTabClass} data-section="content" onclick={handleSectionChange}>
+                                <lightning-icon icon-name="utility:text" size="x-small"></lightning-icon>
+                                Content
+                            </button>
+                        </template>
+                        <template if:true={isTextMode}>
+                            <button class={textStylingTabClass} data-section="textStyling"
+                                onclick={handleSectionChange}>
+                                <lightning-icon icon-name="utility:brush" size="x-small"></lightning-icon>
+                                Text Styling
+                            </button>
+                        </template>
+                        <template if:true={isImageMode}>
+                            <button class={imageStylingTabClass} data-section="imageStyling"
+                                onclick={handleSectionChange}>
+                                <lightning-icon icon-name="utility:image" size="x-small"></lightning-icon>
+                                Image Styling
+                            </button>
+                        </template>
+                        <button class={spacingTabClass} data-section="spacing" onclick={handleSectionChange}>
+                            <lightning-icon icon-name="utility:expand" size="x-small"></lightning-icon>
+                            Spacing
+                        </button>
+                        <button class={effectsTabClass} data-section="effects" onclick={handleSectionChange}>
+                            <lightning-icon icon-name="utility:magicwand" size="x-small"></lightning-icon>
+                            Effects
+                        </button>
+                    </div>
+                    <!-- Content Section -->
+                    <template if:true={isContentActive}>
+                        <div class="section-content">
+                            <h3 class="section-title">Content Configuration</h3>
+
+                            <!-- Custom Class Name -->
+                            <div class="content-group">
+                                <h4 class="group-title">Custom Class Name</h4>
+                                <input type="text" class="url-input" placeholder="e.g., about-us-link"
+                                    value={customClassName} oninput={handleClassNameChange} />
+                                <small class="input-hint">Define a unique class name for this element. This helps in
+                                    reusing the same element across different device layouts.</small>
+                            </div>
+
+                            <!-- Content Type Toggle -->
+                            <div class="content-type-section">
+                                <h4 class="group-title">Content Type</h4>
+                                <div class="toggle-group">
+                                    <label class="radio-option">
+                                        <input type="radio" name="contentMode" value="text" checked={isTextMode}
+                                            onchange={handleContentModeChange} />
+                                        <span class="radio-label">
+                                            <lightning-icon icon-name="utility:text" size="small"></lightning-icon>
+                                            Text Content
+                                        </span>
+                                    </label>
+                                    <label class="radio-option">
+                                        <input type="radio" name="contentMode" value="image" checked={isImageMode}
+                                            onchange={handleContentModeChange} />
+                                        <span class="radio-label">
+                                            <lightning-icon icon-name="utility:image" size="small"></lightning-icon>
+                                            Image Content
+                                        </span>
+                                    </label>
+                                    <label class="radio-option">
+                                        <input type="radio" name="contentMode" value="social-icons"
+                                            checked={isSocialIconsMode} onchange={handleContentModeChange} />
+                                        <span class="radio-label">
+                                            <lightning-icon icon-name="utility:socialshare"
+                                                size="small"></lightning-icon>
+                                            Social Icons
+                                        </span>
+                                    </label>
+                                </div>
+                            </div>
+
+                            <!-- Social Icons Content -->
+                            <template if:true={isSocialIconsMode}>
+                                <div class="content-group">
+                                    <h4 class="group-title">Social Media Configuration</h4>
+
+                                    <!-- Layout Controls -->
+                                    <div class="social-layout-controls">
+                                        <div class="layout-options">
+                                            <div class="form-group">
+                                                <lightning-combobox name="iconLayout" label="Icon Layout"
+                                                    value={currentIconLayout} options={layoutOptions}
+                                                    onchange={handleLayoutChange}>
+                                                </lightning-combobox>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <lightning-combobox name="iconAlignment" label="Icon Alignment"
+                                                    value={currentIconAlignment} options={alignmentOptions}
+                                                    onchange={handleAlignmentChange}>
+                                                </lightning-combobox>
+                                            </div>
+                                        </div>
+
+                                        <div class="size-spacing-controls">
+                                            <div class="form-group">
+                                                <lightning-combobox name="iconSize" label="Icon Size"
+                                                    value={currentIconSize} options={sizeOptions}
+                                                    onchange={handleSizeChange}>
+                                                </lightning-combobox>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label class="form-label">Icon Spacing</label>
+                                                <div class="input-with-slider">
+                                                    <input type="range" min="4" max="32" step="2"
+                                                        value={iconSpacingValue} oninput={handleSpacingChange}
+                                                        class="range-slider" />
+                                                    <input type="number" class="number-input small" min="4" max="32"
+                                                        value={iconSpacingValue} oninput={handleSpacingChange} />
+                                                    <span class="unit-label">px</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Social Icons List -->
+                                    <div class="social-icons-section">
+                                        <div class="section-header">
+                                            <h5 class="icons-title">Social Media Icons</h5>
+                                            <button class="add-icon-btn" onclick={handleAddIcon}>
+                                                <lightning-icon icon-name="utility:add" size="x-small"></lightning-icon>
+                                                Add Icon
+                                            </button>
+                                        </div>
+
+                                        <!-- Icons List -->
+                                        <div class="social-icons-list">
+                                            <template if:true={hasSocialIcons}>
+                                                <template for:each={socialIconsData} for:item="icon">
+                                                    <div key={icon.id} class="social-icon-item">
+                                                        <div class="icon-preview">
+                                                            <img src={icon.iconUrl} alt={icon.platform}
+                                                                class="icon-thumb" />
+                                                        </div>
+
+                                                        <div class="icon-config">
+                                                            <div class="icon-config-row">
+                                                                <lightning-combobox name="platform"
+                                                                    variant="label-hidden" value={icon.platform}
+                                                                    options={platformOptions} data-icon-id={icon.id}
+                                                                    onchange={handlePlatformChange}
+                                                                    placeholder="Select platform">
+                                                                </lightning-combobox>
+
+                                                                <template if:true={icon.isCustom}>
+                                                                    <input type="url" class="custom-icon-url"
+                                                                        placeholder="Custom icon URL"
+                                                                        value={icon.customIconUrl}
+                                                                        data-icon-id={icon.id}
+                                                                        oninput={handleCustomIconUrlChange} />
+                                                                </template>
+                                                            </div>
+
+                                                            <div class="icon-link-row">
+                                                                <input type="url" class="icon-link-input"
+                                                                    placeholder="Link URL (e.g., https://facebook.com/mypage)"
+                                                                    value={icon.linkUrl} data-icon-id={icon.id}
+                                                                    oninput={handleIconLinkChange} />
+
+                                                                <lightning-combobox name="linkTarget"
+                                                                    variant="label-hidden" value={icon.linkTarget}
+                                                                    options={linkTargetOptions} data-icon-id={icon.id}
+                                                                    onchange={handleIconTargetChange}>
+                                                                </lightning-combobox>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="icon-actions">
+                                                            <button class="icon-action-btn move-up"
+                                                                data-icon-id={icon.id} onclick={handleMoveIconUp}
+                                                                disabled={icon.isFirst}>
+                                                                <lightning-icon icon-name="utility:arrowup"
+                                                                    size="xx-small"></lightning-icon>
+                                                            </button>
+                                                            <button class="icon-action-btn move-down"
+                                                                data-icon-id={icon.id} onclick={handleMoveIconDown}
+                                                                disabled={icon.isLast}>
+                                                                <lightning-icon icon-name="utility:arrowdown"
+                                                                    size="xx-small"></lightning-icon>
+                                                            </button>
+                                                            <button class="icon-action-btn delete"
+                                                                data-icon-id={icon.id} onclick={handleDeleteIcon}>
+                                                                <lightning-icon icon-name="utility:delete"
+                                                                    size="xx-small"></lightning-icon>
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                </template>
+                                            </template>
+
+                                            <template if:false={hasSocialIcons}>
+                                                <div class="empty-icons-state">
+                                                    <lightning-icon icon-name="utility:socialshare"
+                                                        size="large"></lightning-icon>
+                                                    <p>No social media icons added yet.</p>
+                                                    <p>Click "Add Icon" to get started.</p>
+                                                </div>
+                                            </template>
+                                        </div>
+                                    </div>
+
+                                    <!-- Quick Presets -->
+                                    <div class="social-presets-section">
+                                        <h5 class="preset-title">Quick Add Popular Icons</h5>
+                                        <div class="preset-icons-grid">
+                                            <template for:each={popularPlatforms} for:item="platform">
+                                                <button key={platform.value} class="preset-icon-btn"
+                                                    data-platform={platform.value} onclick={handleAddPresetIcon}>
+                                                    <img src={platform.iconUrl} alt={platform.label}
+                                                        class="preset-icon-img" />
+                                                    <span class="preset-icon-name">{platform.label}</span>
+                                                </button>
+                                            </template>
+                                        </div>
+                                    </div>
+                                </div>
+                            </template>
+
+                            <!-- Text Content -->
+                            <template if:true={isTextMode}>
+                                <div class="content-group">
+                                    <h4 class="group-title">Text Content</h4>
+                                    <textarea class="content-textarea" placeholder="Enter your text content..." rows="4"
+                                        oninput={handleContentChange}>{contentData.content}</textarea>
+                                    <small class="input-hint">To break the line, use "\n".</small>
+                                </div>
+
+                                <!-- Link Settings for Text -->
+                                <div class="content-group text-href-container">
+                                    <h4 class="group-title">Link Settings (Optional)</h4>
+                                    <div class="link-controls">
+                                        <div class="form-group">
+                                            <div>
+                                                <label class="form-label">Link URL</label>
+                                                <input type="url" class="url-input" placeholder="https://example.com"
+                                                    value={linkData.url} oninput={handleLinkUrlChange} />
+                                            </div>
+                                            <div class="form-group">
+                                                <lightning-combobox name="linkTarget" label="Open Link In"
+                                                    value={currentLinkTarget} options={linkTargetOptions}
+                                                    onchange={handleLinkTargetChange}>
+                                                </lightning-combobox>
+                                            </div>
+                                        </div>
+
+
+                                    </div>
+                                </div>
+                            </template>
+
+                            <!-- Image Content -->
+                            <template if:true={isImageMode}>
+                                <div class="content-group">
+                                    <h4 class="group-title">Image Settings</h4>
+
+                                    <!-- Preset Images -->
+                                    <div class="preset-images-section">
+                                        <h5 class="preset-subtitle">Quick Select Logo Templates</h5>
+                                        <div class="preset-images-grid">
+                                            <template for:each={presetImages} for:item="preset">
+                                                <div key={preset.id} class="preset-image-option" data-url={preset.url}
+                                                    onclick={handlePresetImageSelect}>
+                                                    <img src={preset.url} alt={preset.name} class="preset-thumbnail" />
+                                                    <div class="preset-info">
+                                                        <span class="preset-name">{preset.name}</span>
+                                                        <!-- <small class="preset-dimensions">{preset.dimensions}</small> -->
+                                                    </div>
+                                                </div>
+                                            </template>
+                                        </div>
+                                    </div>
+
+                                    <!-- Custom URL -->
+                                    <div class="form-group">
+                                        <label class="form-label">Custom Image URL</label>
+                                        <input type="url" class="url-input" placeholder="https://example.com/image.jpg"
+                                            value={contentData.imageUrl} oninput={handleImageUrlChange} />
+                                    </div>
+
+                                    <div class="image-link-section">
+                                        <h5 class="subsection-title">Image Link (Optional)</h5>
+
+                                        <div class="form-group href-url-container">
+                                            <div>
+                                                <label class="form-label">Link URL</label>
+                                                <input type="url" class="url-input"
+                                                    placeholder="Enter link URL (e.g., https://example.com)"
+                                                    value={linkData.url} oninput={handleLinkUrlChange} />
+                                                <small class="form-hint">Make the image clickable with this URL
+                                                    (optional)</small>
+                                            </div>
+                                            <div>
+                                                <lightning-combobox name="linkTarget" label="Open Link In"
+                                                    value={linkData.target} options={linkTargetOptions}
+                                                    onchange={handleLinkTargetChange}>
+                                                </lightning-combobox>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                    <template if:true={contentData.imageUrl}>
+                                        <div class="image-preview">
+                                            <img src={contentData.imageUrl} alt="Preview" class="preview-image" />
+                                        </div>
+                                    </template>
+                                </div>
+                            </template>
+                        </div>
+                    </template>
+
+                    <!-- Text Styling Section -->
+                    <template if:true={isTextStylingActive}>
+                        <div class="section-content">
+                            <h3 class="section-title">Text Styling</h3>
+
+                            <!-- Typography Grid -->
+                            <div class="typography-grid">
+                                <div class="form-group">
+                                    <label class="form-label">Font Size</label>
+                                    <div class="input-with-slider">
+                                        <input type="range" min="10" max="48" step="1" value={fontSizeValue}
+                                            data-property="fontSize" oninput={handleStyleChange} class="range-slider" />
+                                        <input type="number" class="number-input small" min="10" max="48"
+                                            value={fontSizeValue} data-property="fontSize"
+                                            oninput={handleStyleChange} />
+                                        <span class="unit-label">px</span>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <lightning-combobox name="fontWeight" label="Font Weight" value={currentFontWeight}
+                                        options={fontWeightOptions} onchange={handleStyleChange}>
+                                    </lightning-combobox>
+                                </div>
+
+                                <div class="form-group">
+                                    <lightning-combobox name="textAlign" label="Text Alignment" value={currentTextAlign}
+                                        options={textAlignOptions} onchange={handleStyleChange}>
+                                    </lightning-combobox>
+                                </div>
+
+                                <div class="form-group">
+                                    <lightning-combobox name="fontFamily" label="Font Family" value={currentFontFamily}
+                                        options={fontFamilyOptions} onchange={handleStyleChange}>
+                                    </lightning-combobox>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="form-label">Line Height</label>
+                                    <div class="input-with-slider">
+                                        <input type="range" min="1" max="3" step="0.1" value={lineHeightValue}
+                                            data-property="lineHeight" oninput={handleStyleChange}
+                                            class="range-slider" />
+                                        <input type="number" class="number-input small" min="1" max="3" step="0.1"
+                                            value={lineHeightValue} data-property="lineHeight"
+                                            oninput={handleStyleChange} />
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="form-label">Letter Spacing</label>
+                                    <div class="input-with-slider">
+                                        <input type="range" min="-2" max="10" step="0.5" value={letterSpacingValue}
+                                            data-property="letterSpacing" oninput={handleStyleChange}
+                                            class="range-slider" />
+                                        <input type="number" class="number-input small" min="-2" max="10" step="0.5"
+                                            value={letterSpacingValue} data-property="letterSpacing"
+                                            oninput={handleStyleChange} />
+                                        <span class="unit-label">px</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Color Controls -->
+                            <div class="color-section">
+                                <h4 class="group-title">Colors</h4>
+                                <div class="color-grid">
+                                    <div class="color-group">
+                                        <label class="color-label">Text Color</label>
+                                        <div class="color-input-wrapper">
+                                            <input type="color" class="color-picker" value={textColorValue}
+                                                data-property="color" oninput={handleColorChange} />
+                                            <input type="text" class="color-text" value={textColorValue}
+                                                data-property="color" oninput={handleStyleChange}
+                                                placeholder="#000000" />
+                                        </div>
+                                    </div>
+
+                                    <div class="color-group">
+                                        <label class="color-label">Background Color</label>
+                                        <div class="color-input-wrapper">
+                                            <input type="color" class="color-picker" value={backgroundColorValue}
+                                                data-property="backgroundColor" oninput={handleColorChange} />
+                                            <input type="text" class="color-text" value={backgroundColorValue}
+                                                data-property="backgroundColor" oninput={handleStyleChange}
+                                                placeholder="inherit" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Text Style Options -->
+                            <div class="text-options-section">
+                                <h4 class="group-title">Text Style</h4>
+                                <div class="style-options">
+                                    <lightning-combobox name="fontStyle" label="Font Style" value={currentFontStyle}
+                                        options={fontStyleOptions} onchange={handleStyleChange}>
+                                    </lightning-combobox>
+                                    <lightning-combobox name="textDecoration" label="Text Decoration"
+                                        value={currentTextDecoration} options={textDecorationOptions}
+                                        onchange={handleStyleChange}>
+                                    </lightning-combobox>
+                                </div>
+                            </div>
+
+                            <!-- Text Presets -->
+                            <div class="preset-section">
+                                <h4 class="preset-title">Quick Text Presets</h4>
+                                <div class="preset-grid">
+                                    <button class="preset-btn text-heading" data-preset="heading"
+                                        onclick={applyTextPreset}>
+                                        <span class="preset-name" style="pointer-events: none;">Heading</span>
+                                    </button>
+                                    <button class="preset-btn text-body" data-preset="body" onclick={applyTextPreset}>
+                                        <span class="preset-name" style="pointer-events: none;">Body Text</span>
+                                    </button>
+                                    <button class="preset-btn text-caption" data-preset="caption"
+                                        onclick={applyTextPreset}>
+                                        <span class="preset-name" style="pointer-events: none;">Caption</span>
+                                    </button>
+                                    <button class="preset-btn text-link" data-preset="link" onclick={applyTextPreset}>
+                                        <span class="preset-name" style="pointer-events: none;">Link Style</span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </template>
+
+                    <!-- Image Styling Section -->
+                    <template if:true={isImageStylingActive}>
+                        <div class="section-content">
+                            <h3 class="section-title">Image Styling</h3>
+
+                            <!-- Manual Dimensions -->
+                            <div class="manual-dimensions-section">
+                                <h4 class="group-title">Custom Dimensions (pixels)</h4>
+                                <div class="dimensions-input-grid">
+                                    <div class="form-group">
+                                        <label class="form-label">Width (px)</label>
+                                        <input type="number" class="dimension-input" min="1" placeholder="auto"
+                                            value={widthDisplayValue} oninput={handleImageWidthChange} />
+                                        <small class="input-hint">Leave empty for auto</small>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label class="form-label">Height (px)</label>
+                                        <input type="number" class="dimension-input" min="1" placeholder="auto"
+                                            value={heightDisplayValue} oninput={handleImageHeightChange} />
+                                        <small class="input-hint">Leave empty for auto</small>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Image Dimensions -->
+                            <div class="dimensions-section">
+                                <h4 class="group-title">Quick Dimensions</h4>
+                                <div class="dimensions-grid">
+                                    <div class="form-group">
+                                        <lightning-combobox name="width" label="Width" options={widthOptions}
+                                            onchange={handleStyleChange}>
+                                        </lightning-combobox>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <lightning-combobox name="height" label="Height" options={heightOptions}
+                                            onchange={handleStyleChange}>
+                                        </lightning-combobox>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <lightning-combobox name="maxWidth" label="Max Width" options={maxWidthOptions}
+                                            onchange={handleStyleChange}>
+                                        </lightning-combobox>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <lightning-combobox name="objectFit" label="Object Fit" value={currentObjectFit}
+                                            options={objectFitOptions} onchange={handleStyleChange}>
+                                        </lightning-combobox>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Image Position & Effects -->
+                            <div class="effects-section">
+                                <h4 class="group-title">Position & Effects</h4>
+                                <div class="effects-grid">
+                                    <div class="form-group">
+                                        <lightning-combobox name="objectPosition" label="Object Position"
+                                            value={currentObjectPosition} options={objectPositionOptions}
+                                            onchange={handleStyleChange}>
+                                        </lightning-combobox>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label class="form-label">Opacity</label>
+                                        <div class="input-with-slider">
+                                            <input type="range" min="0" max="1" step="0.1" value={opacityValue}
+                                                oninput={handleOpacityChange} class="range-slider" />
+                                            <input type="number" class="number-input small" min="0" max="1" step="0.1"
+                                                value={opacityValue} oninput={handleOpacityChange} />
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label class="form-label">Border Radius</label>
+                                        <div class="input-with-slider">
+                                            <input type="range" min="0" max="50" step="1" value={borderRadiusValue}
+                                                data-property="borderRadius" oninput={handleStyleChange}
+                                                class="range-slider" />
+                                            <input type="number" class="number-input small" min="0" max="50"
+                                                value={borderRadiusValue} data-property="borderRadius"
+                                                oninput={handleStyleChange} />
+                                            <span class="unit-label">px</span>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label class="form-label">Background Color</label>
+                                        <div class="color-input-wrapper">
+                                            <input type="color" class="color-picker" value={imageBackgroundColorValue}
+                                                data-property="backgroundColor" oninput={handleImageColorChange} />
+                                            <input type="text" class="color-text" value={imageBackgroundColorValue}
+                                                data-property="backgroundColor" oninput={handleImageStyleChange}
+                                                placeholder="transparent" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Image Presets -->
+                            <div class="preset-section">
+                                <h4 class="preset-title">Quick Image Presets</h4>
+                                <div class="preset-grid">
+                                    <button class="preset-btn image-cover" data-preset="cover"
+                                        onclick={applyImagePreset}>
+                                        <span class="preset-name" style="pointer-events: none;">Cover</span>
+                                    </button>
+                                    <button class="preset-btn image-contain" data-preset="contain"
+                                        onclick={applyImagePreset}>
+                                        <span class="preset-name" style="pointer-events: none;">Contain</span>
+                                    </button>
+                                    <button class="preset-btn image-circle" data-preset="circle"
+                                        onclick={applyImagePreset}>
+                                        <span class="preset-name" style="pointer-events: none;">Circle</span>
+                                    </button>
+                                    <button class="preset-btn image-rounded" data-preset="rounded"
+                                        onclick={applyImagePreset}>
+                                        <span class="preset-name" style="pointer-events: none;">Rounded</span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </template>
+
+                    <!-- Spacing Section -->
+                    <template if:true={isSpacingActive}>
+                        <div class="section-content">
+                            <h3 class="section-title">Spacing Controls</h3>
+
+                            <!-- Unified Controls in One Row -->
+                            <div class="spacing-group">
+                                <h4 class="group-title">Unified Controls</h4>
+                                <div class="unified-controls-row">
+                                    <div class="unified-control">
+                                        <label class="control-label">Apply padding to all sides</label>
+                                        <input type="text" class="unified-input" placeholder="e.g., 20, 10"
+                                            value={paddingToDisplay} oninput={handleUnifiedPaddingChange} />
+                                        <small class="control-hint">Enter a number (px) to apply to all sides</small>
+                                    </div>
+
+                                    <div class="unified-control">
+                                        <label class="control-label">Apply margin to all sides</label>
+                                        <input type="text" class="unified-input" placeholder="e.g., 20, auto, 0"
+                                            value={marginToDisplay} oninput={handleUnifiedMarginChange} />
+                                        <small class="control-hint">Enter a number (px) or 'auto' to apply to all
+                                            sides</small>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Individual Padding Controls in One Row -->
+                            <div class="spacing-group">
+                                <h4 class="group-title">Individual Padding</h4>
+                                <div class="spacing-controls">
+                                    <div class="spacing-control">
+                                        <label>Top</label>
+                                        <div class="control-pair">
+                                            <input type="range" min="0" max="100" step="0.5" value={paddingTopValue}
+                                                data-direction="top" oninput={handlePaddingSliderChange}
+                                                class="spacing-slider" />
+                                            <input type="text" class="spacing-input" value={paddingTopDisplayValue}
+                                                data-direction="top" oninput={handlePaddingInputChange}
+                                                placeholder="0" />
+                                        </div>
+                                        <span class="value-display">{paddingTopValue}px</span>
+                                    </div>
+
+                                    <div class="spacing-control">
+                                        <label>Right</label>
+                                        <div class="control-pair">
+                                            <input type="range" min="0" max="100" step="0.5" value={paddingRightValue}
+                                                data-direction="right" oninput={handlePaddingSliderChange}
+                                                class="spacing-slider" />
+                                            <input type="text" class="spacing-input" value={paddingRightDisplayValue}
+                                                data-direction="right" oninput={handlePaddingInputChange}
+                                                placeholder="0" />
+                                        </div>
+                                        <span class="value-display">{paddingRightValue}px</span>
+                                    </div>
+
+                                    <div class="spacing-control">
+                                        <label>Bottom</label>
+                                        <div class="control-pair">
+                                            <input type="range" min="0" max="100" step="0.5" value={paddingBottomValue}
+                                                data-direction="bottom" oninput={handlePaddingSliderChange}
+                                                class="spacing-slider" />
+                                            <input type="text" class="spacing-input" value={paddingBottomDisplayValue}
+                                                data-direction="bottom" oninput={handlePaddingInputChange}
+                                                placeholder="0" />
+                                        </div>
+                                        <span class="value-display">{paddingBottomValue}px</span>
+                                    </div>
+
+                                    <div class="spacing-control">
+                                        <label>Left</label>
+                                        <div class="control-pair">
+                                            <input type="range" min="0" max="100" step="0.5" value={paddingLeftValue}
+                                                data-direction="left" oninput={handlePaddingSliderChange}
+                                                class="spacing-slider" />
+                                            <input type="text" class="spacing-input" value={paddingLeftDisplayValue}
+                                                data-direction="left" oninput={handlePaddingInputChange}
+                                                placeholder="0" />
+                                        </div>
+                                        <span class="value-display">{paddingLeftValue}px</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Individual Margin Controls in One Row -->
+                            <div class="spacing-group">
+                                <h4 class="group-title">Individual Margin</h4>
+                                <div class="spacing-controls">
+                                    <div class="spacing-control">
+                                        <label>Top</label>
+                                        <div class="control-pair">
+                                            <input type="range" min="0" max="100" step="0.5" value={marginTopValue}
+                                                data-direction="top" oninput={handleMarginSliderChange}
+                                                class="spacing-slider" />
+                                            <input type="text" class="spacing-input" value={marginTopDisplayValue}
+                                                data-direction="top" oninput={handleMarginInputChange}
+                                                placeholder="0 or auto" />
+                                        </div>
+                                        <span class="value-display">{marginTopFullDisplay}</span>
+                                    </div>
+
+                                    <div class="spacing-control">
+                                        <label>Right</label>
+                                        <div class="control-pair">
+                                            <input type="range" min="0" max="100" step="0.5" value={marginRightValue}
+                                                data-direction="right" oninput={handleMarginSliderChange}
+                                                class="spacing-slider" />
+                                            <input type="text" class="spacing-input" value={marginRightDisplayValue}
+                                                data-direction="right" oninput={handleMarginInputChange}
+                                                placeholder="0 or auto" />
+                                        </div>
+                                        <span class="value-display">{marginRightFullDisplay}</span>
+                                    </div>
+
+                                    <div class="spacing-control">
+                                        <label>Bottom</label>
+                                        <div class="control-pair">
+                                            <input type="range" min="0" max="100" step="0.5" value={marginBottomValue}
+                                                data-direction="bottom" oninput={handleMarginSliderChange}
+                                                class="spacing-slider" />
+                                            <input type="text" class="spacing-input" value={marginBottomDisplayValue}
+                                                data-direction="bottom" oninput={handleMarginInputChange}
+                                                placeholder="0 or auto" />
+                                        </div>
+                                        <span class="value-display">{marginBottomFullDisplay}</span>
+                                    </div>
+
+                                    <div class="spacing-control">
+                                        <label>Left</label>
+                                        <div class="control-pair">
+                                            <input type="range" min="0" max="100" step="0.5" value={marginLeftValue}
+                                                data-direction="left" oninput={handleMarginSliderChange}
+                                                class="spacing-slider" />
+                                            <input type="text" class="spacing-input" value={marginLeftDisplayValue}
+                                                data-direction="left" oninput={handleMarginInputChange}
+                                                placeholder="0 or auto" />
+                                        </div>
+                                        <span class="value-display">{marginLeftFullDisplay}</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Add this in the effects section -->
+
+
+
+                            <!-- Div Dimensions in One Row -->
+                            <div class="spacing-group">
+                                <h4 class="group-title">Div Dimensions</h4>
+                                <div class="dimensions-row">
+                                    <!-- Width Control -->
+                                    <div class="dimension-control">
+                                        <label class="control-label">Width</label>
+                                        <div class="dimension-input-group">
+                                            <lightning-combobox name="widthType" variant="label-hidden"
+                                                value={currentWidthType} options={divWidthOptions}
+                                                onchange={handleDivWidthTypeChange} placeholder="Select width type">
+                                            </lightning-combobox>
+
+                                            <template if:true={showCustomWidthInput}>
+                                                <div class="custom-dimension-wrapper">
+                                                    <input type="text" class="dimension-custom-input"
+                                                        placeholder="e.g., 200, 50%" value={customDivWidthValue}
+                                                        oninput={handleCustomDivWidthChange} />
+                                                    <lightning-combobox name="widthUnit" variant="label-hidden"
+                                                        value={widthUnit} options={dimensionUnitOptions}
+                                                        onchange={handleWidthUnitChange}>
+                                                    </lightning-combobox>
+                                                </div>
+                                            </template>
+                                        </div>
+                                        <small class="control-hint">Width of this specific div</small>
+                                    </div>
+
+                                    <!-- Height Control -->
+                                    <div class="dimension-control">
+                                        <label class="control-label">Height</label>
+                                        <div class="dimension-input-group">
+                                            <lightning-combobox name="heightType" variant="label-hidden"
+                                                value={currentHeightType} options={divHeightOptions}
+                                                onchange={handleDivHeightTypeChange} placeholder="Select height type">
+                                            </lightning-combobox>
+
+                                            <template if:true={showCustomHeightInput}>
+                                                <div class="custom-dimension-wrapper">
+                                                    <input type="text" class="dimension-custom-input"
+                                                        placeholder="e.g., 100, 20%" value={customDivHeightValue}
+                                                        oninput={handleCustomDivHeightChange} />
+                                                    <lightning-combobox name="heightUnit" variant="label-hidden"
+                                                        value={heightUnit} options={dimensionUnitOptions}
+                                                        onchange={handleHeightUnitChange}>
+                                                    </lightning-combobox>
+                                                </div>
+                                            </template>
+                                        </div>
+                                        <small class="control-hint">Height of this specific div</small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </template>
+
+                    <!-- Effects Section -->
+                    <template if:true={isEffectsActive}>
+                        <div class="section-content">
+                            <h3 class="section-title">Visual Effects</h3>
+
+                            <div class="effects-grid">
+                                <div class="form-group">
+                                    <lightning-combobox name="boxShadow" label="Box Shadow" value={currentBoxShadow}
+                                        options={boxShadowOptions} onchange={handleStyleChange}>
+                                    </lightning-combobox>
+                                </div>
+
+                                <div class="form-group">
+                                    <lightning-combobox name="textShadow" label="Text Shadow" value={currentTextShadow}
+                                        options={textShadowOptions} onchange={handleStyleChange}>
+                                    </lightning-combobox>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="form-label">Border</label>
+                                    <div class="border-controls">
+                                        <input type="range" min="0" max="10" step="0.5" value={borderWidthValue}
+                                            data-property="borderWidth" oninput={handleStyleChange}
+                                            class="range-slider" />
+                                        <span class="value-display">{borderWidthValue}px</span>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <lightning-combobox name="borderStyle" label="Border Style"
+                                        value={currentBorderStyle} options={borderStyleOptions}
+                                        onchange={handleStyleChange}>
+                                    </lightning-combobox>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="form-label">Border Color</label>
+                                    <div class="color-input-wrapper">
+                                        <input type="color" class="color-picker" value={borderColorValue}
+                                            data-property="borderColor" oninput={handleColorChange} />
+                                        <input type="text" class="color-text" value={borderColorValue}
+                                            data-property="borderColor" oninput={handleStyleChange}
+                                            placeholder="#000000" />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="spacing-group border-radius-container">
+                                <h3 class="group-title">Border Radius Controls</h3>
+
+                                <!-- Unified Border Radius -->
+                                <div class="unified-controls-row">
+                                    <div class="unified-control">
+                                        <label class="control-label">Unified Border Radius</label>
+                                        <input type="number" class="unified-input"
+                                            placeholder="Enter border radius value" value={borderRadiusUnifiedValue}
+                                            oninput={handleUnifiedBorderRadiusChange} min="0">
+                                        <span class="control-hint">Apply same border radius to all corners</span>
+                                    </div>
+                                </div>
+
+                                <!-- Individual Border Radius Controls -->
+                                <div class="spacing-controls">
+                                    <div class="spacing-control">
+                                        <label>Top Left</label>
+                                        <div class="control-pair">
+                                            <input type="range" class="spacing-slider" min="0" max="50"
+                                                value={borderTopLeftRadiusValue} data-direction="topLeft"
+                                                onchange={handleBorderRadiusSliderChange}>
+                                            <input type="number" class="spacing-input"
+                                                value={borderTopLeftRadiusDisplayValue} data-direction="topLeft"
+                                                onchange={handleBorderRadiusInputChange} min="0">
+                                            <span class="value-display">{borderTopLeftRadiusDisplayValue}px</span>
+                                        </div>
+                                    </div>
+
+                                    <div class="spacing-control">
+                                        <label>Top Right</label>
+                                        <div class="control-pair">
+                                            <input type="range" class="spacing-slider" min="0" max="50"
+                                                value={borderTopRightRadiusValue} data-direction="topRight"
+                                                onchange={handleBorderRadiusSliderChange}>
+                                            <input type="number" class="spacing-input"
+                                                value={borderTopRightRadiusDisplayValue} data-direction="topRight"
+                                                onchange={handleBorderRadiusInputChange} min="0">
+                                            <span class="value-display">{borderTopRightRadiusDisplayValue}px</span>
+                                        </div>
+                                    </div>
+
+                                    <div class="spacing-control">
+                                        <label>Bottom Left</label>
+                                        <div class="control-pair">
+                                            <input type="range" class="spacing-slider" min="0" max="50"
+                                                value={borderBottomLeftRadiusValue} data-direction="bottomLeft"
+                                                onchange={handleBorderRadiusSliderChange}>
+                                            <input type="number" class="spacing-input"
+                                                value={borderBottomLeftRadiusDisplayValue} data-direction="bottomLeft"
+                                                onchange={handleBorderRadiusInputChange} min="0">
+                                            <span class="value-display">{borderBottomLeftRadiusDisplayValue}px</span>
+                                        </div>
+                                    </div>
+
+                                    <div class="spacing-control">
+                                        <label>Bottom Right</label>
+                                        <div class="control-pair">
+                                            <input type="range" class="spacing-slider" min="0" max="50"
+                                                value={borderBottomRightRadiusValue} data-direction="bottomRight"
+                                                onchange={handleBorderRadiusSliderChange}>
+                                            <input type="number" class="spacing-input"
+                                                value={borderBottomRightRadiusDisplayValue} data-direction="bottomRight"
+                                                onchange={handleBorderRadiusInputChange} min="0">
+                                            <span class="value-display">{borderBottomRightRadiusDisplayValue}px</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </template>
+                </div>
+
+                <!-- Enhanced Live Preview Section -->
+                <div class="preview-section">
+                    <h3 class="section-title">Live Preview</h3>
+
+                    <!-- Preview Toggle Options -->
+
+
+                    <!-- Preview Content -->
+                    <div class="preview-content-wrapper">
+
+
+
+                        <!-- Footer Context Preview -->
+                        <template if:true={showFooter}>
+                            <div class="footer-preview-container">
+                                <h4 class="preview-subtitle">
+                                    <lightning-icon icon-name="utility:preview" size="x-small"></lightning-icon>
+                                    Full Footer Context
+                                    <template if:true={highlightEnabled}>
+                                        <span class="highlight-indicator">
+                                            <lightning-icon icon-name="utility:target" size="xx-small"></lightning-icon>
+                                            Highlighting Active
+                                        </span>
+                                    </template>
+                                </h4>
+                                <div class="footer-preview-wrapper">
+                                    <c-footer-preview highlight-div-ids={highlightDivIds}
+                                        highlight-enabled={highlightEnabled} instance-id="modal-preview"
+                                        form-factor={formFactor}>
+                                    </c-footer-preview>
+                                </div>
+                            </div>
+                        </template>
+
+                        <!-- Individual Div Preview -->
+                        <template if:true={showIndividual}>
+                            <div class="individual-preview-container">
+                                <h4 class="preview-subtitle">
+                                    <lightning-icon icon-name="utility:zoomin" size="x-small"></lightning-icon>
+                                    Individual Div Preview
+                                </h4>
+                                <div class="preview-box" style={previewStyle}>
+                                    <template if:true={isTextMode}>
+                                        <div class="preview-content">
+                                            <template if:true={linkData.url}>
+                                                <a href={linkData.url} target={linkData.target} class="text-content"
+                                                    style={textContentStyle}>
+                                                    <template for:each={processedTextLines} for:item="line">
+                                                        <p key={line.id}>{line.text}</p>
+                                                    </template>
+                                                </a>
+                                            </template>
+                                            <template if:false={linkData.url}>
+                                                <span class="text-content" style={textContentStyle}>
+                                                    <template for:each={processedTextLines} for:item="line">
+                                                        <p key={line.id}>{line.text}</p>
+                                                    </template>
+                                                </span>
+                                            </template>
+                                        </div>
+                                    </template>
+                                    <template if:true={isImageMode}>
+                                        <template if:true={contentData.imageUrl}>
+                                            <template if:true={linkData.url}>
+                                                <a href={linkData.url} target={linkData.target}>
+                                                    <img src={contentData.imageUrl} alt="Preview" class="preview-image"
+                                                        style={imageContentStyle} />
+                                                </a>
+                                            </template>
+                                            <template if:false={linkData.url}>
+                                                <img src={contentData.imageUrl} alt="Preview" class="preview-image"
+                                                    style={imageContentStyle} />
+                                            </template>
+                                        </template>
+                                        <template if:false={contentData.imageUrl}>
+                                            <div class="preview-content">
+                                                <span class="text-content">Image Preview (Add URL above)</span>
+                                            </div>
+                                        </template>
+                                    </template>
+                                    <template if:true={isSocialIconsMode}>
+                                        <template if:true={hasSocialIcons}>
+                                            <div class="social-icons-preview" style={socialIconsPreviewStyle}>
+                                                <template for:each={socialIconsData} for:item="icon">
+                                                    <div key={icon.id} if:true={icon.iconUrl}>
+                                                        <div if:true={icon.linkUrl}>
+                                                            <a href={icon.linkUrl} target={icon.linkTarget}
+                                                                class="social-icon-link">
+                                                                <img src={icon.iconUrl} alt={icon.platform}
+                                                                    class="social-icon-preview-img"
+                                                                    style={socialIconPreviewStyle} />
+                                                            </a>
+                                                        </div>
+                                                        <div if:false={icon.linkUrl}>
+                                                            <img src={icon.iconUrl} alt={icon.platform}
+                                                                class="social-icon-preview-img"
+                                                                style={socialIconPreviewStyle} />
+                                                        </div>
+                                                    </div>
+                                                </template>
+                                            </div>
+                                        </template>
+                                        <template if:false={hasSocialIcons}>
+                                            <div class="preview-content">
+                                                <span class="text-content">Add social media icons above to see
+                                                    preview</span>
+                                            </div>
+                                        </template>
+                                    </template>
+                                </div>
+                            </div>
+                        </template>
+                    </div>
+
+                    <div class="preview-toggle-section">
+                        <div class="toggle-buttons">
+                            <button class={individualPreviewClass} onclick={showIndividualPreview}>
+                                <lightning-icon icon-name="utility:zoomin" size="x-small"></lightning-icon>
+                                Individual Div
+                            </button>
+                            <button class={footerPreviewClass} onclick={showFooterPreview}>
+                                <lightning-icon icon-name="utility:preview" size="x-small"></lightning-icon>
+                                Full Footer
+                            </button>
+                            <button class={bothPreviewClass} onclick={showBothPreviews}>
+                                <lightning-icon icon-name="utility:side_list" size="x-small"></lightning-icon>
+                                Both Views
+                            </button>
+
+                            <!-- New Highlight Toggle Button -->
+                            <template if:true={showFooter}>
+                                <button class={highlightToggleClass} onclick={toggleHighlight}>
+                                    <lightning-icon icon-name="utility:target" size="x-small"></lightning-icon>
+                                    {highlightButtonText}
+                                </button>
+                            </template>
+                        </div>
+
+                        <!-- Toggle Description -->
+                        <template if:true={showFooter}>
+                            <div class="toggle-description">
+                                <small class="toggle-hint">
+                                    <lightning-icon icon-name="utility:info" size="xx-small"></lightning-icon>
+                                    {highlightDescription}
+                                </small>
+                            </div>
+                        </template>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Modal Footer -->
+            <div class="modal-footer">
+                <button class="btn secondary" onclick={handleReset}>
+                    <lightning-icon icon-name="utility:refresh" size="x-small"></lightning-icon>
+                    Reset to Defaults
+                </button>
+                <!--  <button class="btn secondary" onclick={handleClose}>
+                    Cancel
+                </button> -->
+                <button class="btn primary" onclick={handleSave}>
+                    <lightning-icon icon-name="utility:save" size="x-small"></lightning-icon>
+                    Apply Styles
+                </button>
+            </div>
+        </div>
+    </div>
+</template>

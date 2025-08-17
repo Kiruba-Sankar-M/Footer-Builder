@@ -1,0 +1,181 @@
+<template>
+    <div class="modal-overlay" onclick={handleOverlayClick}>
+        <div class="config-modal-container" onclick={handleModalClick}>
+            <div class="config-modal-header">
+                <div class="modal-title">
+                    <lightning-icon icon-name="utility:save" size="small"></lightning-icon>
+                    <div>
+                        <h2>Save & Load Configuration</h2>
+                        <p>Save your footer design progress or load a previous design</p>
+                    </div>
+                </div>
+                <button class="close-btn" onclick={handleClose}>
+                    <lightning-icon icon-name="utility:close" size="small"></lightning-icon>
+                </button>
+            </div>
+
+            <div class="config-modal-content">
+                <!-- Presets Section -->
+                <div class="config-section">
+                    <h3 class="section-title">
+                        <lightning-icon icon-name="utility:preview" size="x-small"></lightning-icon>
+                        Load a Preset Design
+                    </h3>
+                    <div class="presets-grid">
+                        <template for:each={presets} for:item="preset">
+                            <div key={preset.name} class="preset-tile">
+                                <div class="preset-info">
+                                    <lightning-icon icon-name="utility:insert_template" size="medium"></lightning-icon>
+                                    <span class="preset-name">{preset.name}</span>
+                                </div>
+                                <button class="load-btn" data-preset-name={preset.name} onclick={loadPreset}>
+                                    <lightning-icon icon-name="utility:upload" size="xx-small"></lightning-icon>
+                                    Load
+                                </button>
+                            </div>
+                        </template>
+                    </div>
+                </div>
+
+                <!-- Save Section -->
+                <div class="config-section">
+                    <h3 class="section-title">
+                        <lightning-icon icon-name="utility:save" size="x-small"></lightning-icon>
+                        Save Current Design
+                    </h3>
+
+                    <div class="save-options">
+                        <div class="form-group">
+                            <div class="info-note">
+                                <lightning-icon icon-name="utility:info" size="x-small"></lightning-icon>
+                                <p>If the entered name matches an existing design, it will be overwritten.</p>
+                            </div>
+                            <label class="form-label">Design Name</label>
+                            <input type="text" class="form-input"
+                                placeholder="Enter a name for your design (e.g., Company Footer v1)" value={designName}
+                                oninput={handleDesignNameChange} />
+
+                        </div>
+
+                        <div class="save-buttons">
+                            <button class="save-btn local" onclick={saveToLocal}>
+                                <lightning-icon icon-name="utility:desktop" size="x-small"></lightning-icon>
+                                Save to Local Storage
+                            </button>
+
+                            <button class="save-btn download" onclick={downloadAsFile}>
+                                <lightning-icon icon-name="utility:download" size="x-small"></lightning-icon>
+                                Download as File
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Load Section -->
+                <div class="config-section">
+                    <h3 class="section-title">
+                        <lightning-icon icon-name="utility:upload" size="x-small"></lightning-icon>
+                        Load Saved Design
+                    </h3>
+
+                    <div class="load-options">
+                        <!-- Local Storage Designs -->
+                        <template if:true={hasSavedDesigns}>
+                            <div class="saved-designs">
+                                <h4 class="subsection-title">Saved Designs</h4>
+                                <div class="designs-list">
+                                    <template for:each={savedDesigns} for:item="design">
+                                        <div key={design.id} class="design-item">
+                                            <div class="design-info">
+                                                <span class="design-name">{design.name}</span>
+                                                <span class="design-date">{design.date}</span>
+                                            </div>
+                                            <div class="design-actions">
+                                                <button class="load-btn" data-design-id={design.id}
+                                                    onclick={loadDesign}>
+                                                    <lightning-icon icon-name="utility:upload"
+                                                        size="xx-small"></lightning-icon>
+                                                    Load
+                                                </button>
+                                                <button class="update-btn" data-design-id={design.id}
+                                                    data-design-name={design.name} onclick={updateDesign}>
+                                                    <lightning-icon icon-name="utility:record_update"
+                                                        size="xx-small"></lightning-icon>
+                                                    Update
+                                                </button>
+
+                                                <lightning-icon class="hover" icon-name="action:download"
+                                                    title="Download" data-design-id={design.id}
+                                                    data-design-name={design.name} onclick={handleDownload}
+                                                    size="xx-small"></lightning-icon>
+
+
+                                                <lightning-icon class="hover" icon-name="action:delete" title="Delete"
+                                                    data-design-id={design.id} data-design-name={design.name}
+                                                    onclick={deleteDesign} size="xx-small"></lightning-icon>
+                                            </div>
+                                        </div>
+                                    </template>
+                                </div>
+                            </div>
+                        </template>
+
+                        <!-- File Upload -->
+                        <div class="file-upload-section">
+                            <h4 class="subsection-title">Upload Design File</h4>
+                            <div class="file-upload-area">
+                                <input type="file" class="file-input" accept=".json" onchange={handleFileUpload}
+                                    id="config-file-input" />
+                                <label for="config-file-input" class="file-upload-label">
+                                    <lightning-icon icon-name="utility:upload" size="large"></lightning-icon>
+                                    <span class="upload-text">Click to upload design file (.json)</span>
+                                    <span class="upload-hint">Or drag and drop your saved design file here</span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Current Design Info -->
+                <div class="config-section">
+                    <h3 class="section-title">
+                        <lightning-icon icon-name="utility:info" size="x-small"></lightning-icon>
+                        Current Design Info
+                    </h3>
+                    <div class="design-stats-table">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Device</th>
+                                    <th>Cols</th>
+                                    <th>Rows</th>
+                                    <th>Gap</th>
+                                    <th>Width</th>
+                                    <th>Height</th>
+                                    <th>Divs</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <template for:each={deviceConfigurations} for:item="deviceConfig">
+                                    <tr key={deviceConfig.name}>
+                                        <td>{deviceConfig.name}</td>
+                                        <td>{deviceConfig.columns}</td>
+                                        <td>{deviceConfig.rows}</td>
+                                        <td>{deviceConfig.gap}</td>
+                                        <td>{deviceConfig.width}</td>
+                                        <td>{deviceConfig.height}</td>
+                                        <td>{deviceConfig.divs}</td>
+                                    </tr>
+                                </template>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <div class="config-modal-footer">
+                <button class="btn secondary" onclick={handleClose}>Close</button>
+            </div>
+        </div>
+    </div>
+</template>
