@@ -1746,6 +1746,18 @@
     .spacing-controls {
         grid-template-columns: 1fr;
     }
+
+    .modal-content{
+        flex-wrap: wrap;
+    }
+
+    .styling-container{
+        max-width: 100%;
+    }
+
+    .preview-section{
+        width: 100%;
+    }
 }
 
 /* Accessibility */
