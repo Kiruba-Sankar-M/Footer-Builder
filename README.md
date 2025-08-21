@@ -69,9 +69,3 @@ When you open the builder, you’ll see:
 
 ---
 
-## More Details
-
-For the full documentation, please check:
-👉 [Declarative Footer Builder Guide](https://docs.google.com/document/d/1wkJN5gZ4MVYL5RHanm1PcAsG5LoIeTS2SVG0ANP9N1A/edit?tab=t.0)
-
----
