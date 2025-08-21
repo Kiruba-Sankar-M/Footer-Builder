@@ -1,18 +1,74 @@
-# Salesforce DX Project: Next Steps
+# Declarative Footer Builder
 
-Now that you’ve created a Salesforce DX project, what’s next? Here are some documentation resources to get you started.
+Welcome to the **Declarative Footer Builder**! 
+This tool helps you create beautiful, responsive footers for your websites **without writing a single line of code**.
 
-## How Do You Plan to Deploy Your Changes?
+---
+🌐 **Live Website:** [https://footer-builder-dev-ed.develop.my.site.com/s/](https://footer-builder-dev-ed.develop.my.site.com/s/)
 
-Do you want to deploy a set of changes, or create a self-contained application? Choose a [development model](https://developer.salesforce.com/tools/vscode/en/user-guide/development-models).
+## Getting Started
 
-## Configure Your Salesforce DX Project
+When you open the builder, you’ll see:
 
-The `sfdx-project.json` file contains useful configuration information for your project. See [Salesforce DX Project Configuration](https://developer.salesforce.com/docs/atlas.en-us.sfdx_dev.meta/sfdx_dev/sfdx_dev_ws_config.htm) in the _Salesforce DX Developer Guide_ for details about this file.
+* **Main Canvas** → A grid area where you build your footer.
+* **Device Controls** → Switch between Desktop, Tablet, and Mobile views.
+* **Settings & Actions** → Configure rows, columns, gaps, and manage styling, saving, and loading.
 
-## Read All About It
+---
 
-- [Salesforce Extensions Documentation](https://developer.salesforce.com/tools/vscode/)
-- [Salesforce CLI Setup Guide](https://developer.salesforce.com/docs/atlas.en-us.sfdx_setup.meta/sfdx_setup/sfdx_setup_intro.htm)
-- [Salesforce DX Developer Guide](https://developer.salesforce.com/docs/atlas.en-us.sfdx_dev.meta/sfdx_dev/sfdx_dev_intro.htm)
-- [Salesforce CLI Command Reference](https://developer.salesforce.com/docs/atlas.en-us.sfdx_cli_reference.meta/sfdx_cli_reference/cli_reference.htm)
+## 1. Building Your Footer Layout
+
+* **Switch Devices**: Toggle between Desktop / Tablet / Mobile layouts.
+* **Grid Controls**: Adjust `Columns`, `Rows`, and `Gap`.
+* **Pro Tip**: Start with Desktop → then sync to Tablet & Mobile for faster setup.
+
+---
+
+##  2. Adding & Arranging Content
+
+* **Add Content** → Click an empty grid cell to add a content box.
+* **Drag & Drop** → Move content boxes freely.
+* **Resize** → Use blue handles to span multiple rows/columns.
+
+---
+
+## 3. Styling Your Content
+
+* **Footer Styling** → Use the *Style Footer* button to set background, padding, etc.
+* **Box Styling** → Hover → Paintbrush icon → Style Editor.
+
+### Inside the Style Editor:
+
+* **Content**: Text, links, images, or social icons.
+* **Text Styling**: Font size, weight, color, alignment.
+* **Image Styling**: Fit, size, linking.
+* **Spacing**: Padding & margin.
+* **Effects**: Borders, shadows, rounded corners.
+
+💡 **Multi-Select Styling** → `Ctrl` (Windows) / `Cmd` (Mac) + Click multiple boxes → Style them together.
+
+---
+
+## 4. Advanced Editing
+
+* **Undo/Redo** → Step through changes.
+* **Copy/Paste** → Duplicate boxes and styles anywhere in the grid.
+
+---
+
+## 5. Saving, Loading & Exporting
+
+* **Save/Load** → Use the *Configuration Manager* to:
+
+  * Save to local storage or JSON file.
+  * Load previous or preset designs.
+* **Preview & Download** → See live responsive previews → Export as a ready-to-use **HTML file with embedded CSS**.
+
+---
+
+## More Details
+
+For the full documentation, please check:
+👉 [Declarative Footer Builder Guide](https://docs.google.com/document/d/1wkJN5gZ4MVYL5RHanm1PcAsG5LoIeTS2SVG0ANP9N1A/edit?tab=t.0)
+
+---
