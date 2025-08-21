@@ -4,7 +4,10 @@ Welcome to the **Declarative Footer Builder**!
 This tool helps you create beautiful, responsive footers for your websites **without writing a single line of code**.
 
 ---
-🌐 **Live Website:** [https://footer-builder-dev-ed.develop.my.site.com/s/](https://footer-builder-dev-ed.develop.my.site.com/s/)
+🌐 **Live Website:**  <a href="https://footer-builder-dev-ed.develop.my.site.com/s/" target="_blank">https://footer-builder-dev-ed.develop.my.site.com/s/</a>  
+💼 **My Portfolio:** <a href="https://kiruba-sankar-dev-ed.develop.my.site.com/portfolio/s/" target="_blank">https://kiruba-sankar-dev-ed-develop.my.site.com/portfolio/s/</a>  
+📖 **Documentation:** <a href="https://docs.google.com/document/d/1wkJN5gZ4MVYL5RHanm1PcAsG5LoIeTS2SVG0ANP9N1A/edit?tab=t.0" target="_blank">Click here to view the full guide</a>  
+
 
 ## Getting Started
 
