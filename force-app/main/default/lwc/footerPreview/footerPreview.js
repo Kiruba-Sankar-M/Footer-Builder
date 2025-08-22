@@ -86,7 +86,6 @@ export default class FooterPreview extends LightningElement {
         }, 100);
     }
 
-    // #region Tab Management
     showPreviewTab() {
         this.activeTab = 'Preview';
         this.hasRenderedExactPreview = false; // Force re-render
@@ -94,9 +93,7 @@ export default class FooterPreview extends LightningElement {
     }
     showHtmlTab() { this.activeTab = 'HTML'; }
     showCssTab() { this.activeTab = 'CSS'; }
-    // #endregion
 
-    // #region Device Preview Toggles
     showDesktopPreview() {
         this.currentPreviewDevice = 'desktop';
         this.renderExactPreview();
@@ -111,9 +108,7 @@ export default class FooterPreview extends LightningElement {
         this.currentPreviewDevice = 'mobile';
         this.renderExactPreview();
     }
-    // #endregion
 
-    // #region Code Generation and Handling
     handleCopyCode(event) {
         this.copyToClipboard(this.displayedCode, event.currentTarget);
     }
@@ -164,9 +159,7 @@ export default class FooterPreview extends LightningElement {
             button.classList.remove('success');
         }, 2000);
     }
-    // #endregion
 
-    // #region Rendering Logic
     @api
     clearExactPreview() {
         const container = this.template.querySelector('[data-id="exact-preview"]');
@@ -257,16 +250,7 @@ export default class FooterPreview extends LightningElement {
         const config = this.currentConfig;
         return `${config.deviceColumns || 'N/A'}×${config.deviceRows || 'N/A'}`;
     }
-    // #endregion
 
-    // #region Code Generation Getters
-
-    /**
-     * @description Determines the definitive CSS class name for a cell.
-     * Uses the customClassName if available, otherwise generates one based on content type.
-     * @param {object} cell - The grid item cell configuration.
-     * @returns {string} The final, sanitized CSS class name.
-     */
     _getFinalClassName(cell) {
         // Ensure customClassName is a string before trimming and processing
         if (typeof cell.customClassName === 'string' && cell.customClassName.trim() !== '') {
@@ -294,11 +278,7 @@ export default class FooterPreview extends LightningElement {
         return sanitized || 'footer-div';
     }
 
-    /**
-     * @description Gathers unique elements from all device configurations based on their final class name.
-     * This ensures that each conceptual element (e.g., 'about-us' link) is only rendered once in the HTML.
-     * @returns {Array} An array of unique cell configuration objects, with an added `finalClassName` property.
-     */
+
     get _uniqueElementsByClass() {
         const uniqueElements = new Map();
 
@@ -319,10 +299,6 @@ export default class FooterPreview extends LightningElement {
         return Array.from(uniqueElements.values());
     }
 
-    /**
-     * @description Generates the complete HTML for the footer based on unique elements.
-     * @returns {string} The generated HTML string.
-     */
     get generatedHtmlCode() {
         let html = `<div class="footer-container">\n`;
         this._uniqueElementsByClass.forEach(cell => {
@@ -373,10 +349,7 @@ export default class FooterPreview extends LightningElement {
         return html;
     }
 
-    /**
-     * @description Generates the complete, responsive CSS for all devices.
-     * @returns {string} The generated CSS string.
-     */
+
     get generatedCssCode() {
         const desktopConfig = this._configurations.desktop || {};
         const indent = '    ';
@@ -438,10 +411,6 @@ export default class FooterPreview extends LightningElement {
         return css;
     }
 
-    /**
-     * @description Generates the CSS for the live preview, showing only the current device's styles.
-     * @returns {string} The generated CSS string for the current preview device.
-     */
     get generatedCssCodeForPreview() {
         const config = this._configurations[this.currentPreviewDevice];
         if (!config || !config.gridItems) return '';
@@ -477,9 +446,7 @@ export default class FooterPreview extends LightningElement {
 
         return css;
     }
-    // #endregion
-
-    // #region Style Generation Helpers
+  
     generateCellCssForDevice(cells, indent = '', device) {
         let css = '';
         const deviceGridItems = this._configurations[device]?.gridItems || [];
@@ -769,5 +736,4 @@ ${indent}    `)};
             return text;
         }
     }
-    // #endregion   
 }

@@ -301,4 +301,8 @@
     .preview-header, .device-toggle-section, .preview-footer, .preview-content-wrapper{
         overflow: auto;
     }
+
+    .footer-preview-content{
+        overflow: auto;
+    }
 }
